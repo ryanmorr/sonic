@@ -1,0 +1,42 @@
+{
+  "name": "Sonic",
+  "description": "A modern, lightweight, context-aware, and extentable CSS selector engine built on top of querySelectorAll",
+  "version": "0.1.0",
+  "license": "Unlicense",
+  "homepage": "https://github.com/ryanmorr/sonic",
+  "author": {
+    "name": "Ryan Morr",
+    "email": "rm.morr@gmail.com",
+    "url": "http://ryanmorr.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ryanmorr/sonic.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ryanmorr/sonic/issues"
+  },
+  "devDependencies": {
+    "babel-core": "^6.11.4",
+    "babel-eslint": "^6.1.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-es2015": "^6.9.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.0",
+    "chai": "^3.5.0",
+    "del": "^2.2.1",
+    "gulp": "^3.9.1",
+    "gulp-eslint": "^3.0.1",
+    "gulp-header": "^1.8.7",
+    "gulp-mocha": "^2.2.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.4",
+    "jsdom": "^9.4.1",
+    "jsdom-global": "^2.0.0",
+    "mocha": "^2.5.3",
+    "sinon": "^1.17.5",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
