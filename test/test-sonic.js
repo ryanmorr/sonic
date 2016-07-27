@@ -3,7 +3,7 @@
 import { expect } from 'chai';
 import sonic, { is, find, query, pseudos } from '../src/sonic';
 
-describe('Sonic', () => {
+describe('sonic', () => {
     it('should support importing of individual methods/properties (is, find, query, pseudos)', () => {
         expect(is).to.be.a('function');
         expect(find).to.be.a('function');
