@@ -118,8 +118,17 @@ describe('sonic - find/query', () => {
         ]);
     });
 
-    it('should support attributes selectors', () => {
-
+    it('should support attribute selectors', () => {
+        batchCheckSelectors([
+            {selector: '[foo]', length: 5},
+            {selector: '[foo=bar]', length: 2},
+            {selector: '[baz][qux][lang]', length: 1},
+            {selector: '[qux~="random"]', length: 3},
+            {selector: '[qux*="rand"]', length: 3},
+            {selector: '[lang|="en"]', length: 2},
+            {selector: '[qux^="some"]', length: 3},
+            {selector: '[qux$="text"]', context: document.querySelector('#section2'), length: 2}
+        ]);
     });
 
     it('should support pseudo-class selectors', () => {
