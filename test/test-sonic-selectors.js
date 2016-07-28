@@ -1,7 +1,7 @@
 /* eslint-disable max-len, no-unused-expressions */
 
 import { expect } from 'chai';
-import { is } from '../src/sonic';
+import { is, find, query } from '../src/sonic';
 
 document.body.innerHTML = `
     <section id="section">
@@ -25,11 +25,11 @@ document.body.innerHTML = `
                 <div></div>
             </article>
         </div>
-        <div></div>
+        <div lang="en-us"></div>
         <div></div>
         <div foo></div>
     </section>
-    <section>
+    <section id="section2">
         <h1>Top Heading</h1>
         <section>
             <h1>Sub Heading</h1>
@@ -43,6 +43,8 @@ document.body.innerHTML = `
                 <li class="list-item"></li>
             </ul>
         </div>
+        <div qux="some random text"></div>
+        <span qux="some random text"></span>
     </section>
 `;
 
@@ -64,5 +66,91 @@ describe('sonic - is', () => {
         expect(is(div, '[qux$="text"]')).to.equal(true);
         expect(is(div, '[lang|="en"]')).to.equal(true);
         expect(is(div, 'div#unique.foo.bar[baz=aaa][qux="some random text"][lang="en-us"]')).to.equal(true);
+    });
+});
+
+describe('sonic - find/query', () => {
+    it('should support tag selectors', () => {
+        
+    });
+
+    it('should support id selectors', () => {
+        
+    });
+
+    it('should support class selectors', () => {
+        
+    });
+
+    it('should support attributes selectors', () => {
+        
+    });
+
+    it('should support pseudo-class selectors', () => {
+        
+    });
+
+    it('should support custom pseudo-class selectors', () => {
+        
+    });
+
+    it('should support decendant combinator selectors', () => {
+        
+    });
+
+    it('should support starting decendant combinator selectors', () => {
+        
+    });
+
+    it('should support child combinator selectors', () => {
+        
+    });
+
+    it('should support starting child combinator selectors', () => {
+        
+    });
+
+    it('should support adjacent sibling combinator selectors', () => {
+        
+    });
+
+    it('should support starting adjacent sibling combinator selectors', () => {
+        
+    });
+
+    it('should support general sibling combinator selectors', () => {
+        
+    });
+
+    it('should support starting general sibling combinator selectors', () => {
+        
+    });
+
+    it('should support multiple selectors', () => {
+        
+    });
+
+    it('should support complex selectors', () => {
+        
+    });
+
+    it('should be context-aware', () => {
+
+    });
+
+    it('should support a contextual element as an optional second argument', () => {
+        
+    });
+
+    it('should support a selector string for a contextual element as an optional second argument', () => {
+
+    });
+
+    it('should not return duplicate elements', () => {
+        
+    });
+
+    it('should return elements in the order they appear in the document', () => {
+        
     });
 });
