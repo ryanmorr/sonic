@@ -7,7 +7,7 @@ document.body.innerHTML = `
     <section id="section">
         <div foo></div>
         <div id="unique" class="foo bar" baz="aaa" qux="some random text" lang="en-us"></div>
-        <div foo></div>
+        <div foo="bar"></div>
         <div></div>
         <div></div>
         <div>
@@ -15,17 +15,17 @@ document.body.innerHTML = `
                 <div></div>
                 <div foo></div>
                 <div foo="bar"></div>
-                <div bar="baz"></div>
+                <div></div>
                 <div>
                     <i></i>
                     <i aaa></i>
                     <i bbb></i>
                     <em ccc></em>
                 </div>
-                <div></div>
+                <div class="foo"></div>
             </article>
         </div>
-        <div lang="en-us"></div>
+        <div class="foo" lang="en-us"></div>
         <div></div>
         <div foo></div>
     </section>
@@ -43,7 +43,7 @@ document.body.innerHTML = `
                 <li class="list-item"></li>
             </ul>
         </div>
-        <div qux="some random text"></div>
+        <div class="bar" qux="some random text"></div>
         <span qux="some random text"></span>
     </section>
 `;
@@ -70,6 +70,16 @@ describe('sonic - matches', () => {
 });
 
 describe('sonic - find/query', () => {
+    function batchCheckSelectors(items) {
+        items.forEach((item) => {
+            const context = item.context || document;
+            const expected = context.querySelectorAll(item.selector);
+            const element = find(item.selector, context);
+            const elements = query(item.selector, context);
+            checkElements(expected, element, elements, item.length);
+        });
+    }
+
     function checkElements(expected, element, elements, expectedLength) {
         expect(elements).to.have.lengthOf(expectedLength);
         expect(element).to.equal(expected[0]);
@@ -79,24 +89,33 @@ describe('sonic - find/query', () => {
     }
 
     it('should support tag selectors', () => {
-        const expected = document.querySelectorAll('section');
-        const element = find('section');
-        const elements = query('section');
-        checkElements(expected, element, elements, 3);
+        batchCheckSelectors([
+            {selector: 'section', length: 3},
+            {selector: 'div', length: 17},
+            {selector: 'i', length: 3},
+            {selector: 'li', length: 5},
+            {selector: 'h1', length: 2},
+            {selector: 'div', context: document.querySelector('#section'), length: 15},
+            {selector: 'div', context: document.querySelector('article'), length: 6}
+        ]);
     });
 
     it('should support id selectors', () => {
-        const expected = document.querySelectorAll('#section');
-        const element = find('#section');
-        const elements = query('#section');
-        checkElements(expected, element, elements, 1);
+        batchCheckSelectors([
+            {selector: '#section', length: 1},
+            {selector: '#section2', length: 1},
+            {selector: '#section', context: document.querySelector('#section'), length: 0}
+        ]);
     });
 
     it('should support class selectors', () => {
-        const expected = document.querySelectorAll('.list-item');
-        const element = find('.list-item');
-        const elements = query('.list-item');
-        checkElements(expected, element, elements, 5);
+        batchCheckSelectors([
+            {selector: '.list-item', length: 5},
+            {selector: '.foo', length: 3},
+            {selector: '.bar', length: 2},
+            {selector: '.foo.bar', length: 1},
+            {selector: '.bar', context: document.querySelector('#section'), length: 1}
+        ]);
     });
 
     it('should support attributes selectors', () => {
