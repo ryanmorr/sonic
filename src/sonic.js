@@ -14,7 +14,7 @@ const pseudoRe = /:([\w-]+)(?:\(([^)]*)\))?/g;
  * Feature test for the browser's implementation
  * of `matches`
  */
-const matches = [
+const matchesFn = [
     'matches',
     'matchesSelector',
     'webkitMatchesSelector',
@@ -84,7 +84,7 @@ const combinators = {
      */
     '+': function adjacentSiblingCombinator(context, token, results) {
         const el = context.nextElementSibling;
-        if (el && is(el, token.selector) && filter(el, token.filters)) {
+        if (el && matches(el, token.selector) && filter(el, token.filters)) {
             results.push(el);
         }
     },
@@ -101,7 +101,7 @@ const combinators = {
     '~': function generalSiblingCombinator(context, token, results) {
         let el = context.nextElementSibling;
         while (el) {
-            if (is(el, token.selector) && filter(el, token.filters)) {
+            if (matches(el, token.selector) && filter(el, token.filters)) {
                 results.push(el);
             }
             el = el.nextElementSibling;
@@ -190,8 +190,8 @@ function process(nodes, combinator, token) {
  * @return {Boolean}
  * @api public
  */
-export function is(el, selector) {
-    return el[matches](selector);
+export function matches(el, selector) {
+    return el[matchesFn](selector);
 }
 
 /**
@@ -237,5 +237,5 @@ export function query(selector, root = doc) {
 /**
  * Declare and export `sonic` namespace
  */
-const sonic = {is, find, query, pseudos};
+const sonic = {matches, find, query, pseudos};
 export default sonic;
