@@ -70,68 +70,85 @@ describe('sonic - is', () => {
 });
 
 describe('sonic - find/query', () => {
+    function checkElements(expected, element, elements, expectedLength) {
+        expect(elements).to.have.lengthOf(expectedLength);
+        expect(element).to.equal(expected[0]);
+        elements.forEach((el, i) => {
+            expect(el).to.equal(expected[i]);
+        });
+    }
+
     it('should support tag selectors', () => {
-        
+        const expected = document.querySelectorAll('section');
+        const element = find('section');
+        const elements = query('section');
+        checkElements(expected, element, elements, 3);
     });
 
     it('should support id selectors', () => {
-        
+        const expected = document.querySelectorAll('#section');
+        const element = find('#section');
+        const elements = query('#section');
+        checkElements(expected, element, elements, 1);
     });
 
     it('should support class selectors', () => {
-        
+        const expected = document.querySelectorAll('.list-item');
+        const element = find('.list-item');
+        const elements = query('.list-item');
+        checkElements(expected, element, elements, 5);
     });
 
     it('should support attributes selectors', () => {
-        
+
     });
 
     it('should support pseudo-class selectors', () => {
-        
+
     });
 
     it('should support custom pseudo-class selectors', () => {
-        
+
     });
 
     it('should support decendant combinator selectors', () => {
-        
+
     });
 
     it('should support starting decendant combinator selectors', () => {
-        
+
     });
 
     it('should support child combinator selectors', () => {
-        
+
     });
 
     it('should support starting child combinator selectors', () => {
-        
+
     });
 
     it('should support adjacent sibling combinator selectors', () => {
-        
+
     });
 
     it('should support starting adjacent sibling combinator selectors', () => {
-        
+
     });
 
     it('should support general sibling combinator selectors', () => {
-        
+
     });
 
     it('should support starting general sibling combinator selectors', () => {
-        
+
     });
 
     it('should support multiple selectors', () => {
-        
+
     });
 
     it('should support complex selectors', () => {
-        
+
     });
 
     it('should be context-aware', () => {
@@ -139,7 +156,7 @@ describe('sonic - find/query', () => {
     });
 
     it('should support a contextual element as an optional second argument', () => {
-        
+
     });
 
     it('should support a selector string for a contextual element as an optional second argument', () => {
@@ -147,10 +164,10 @@ describe('sonic - find/query', () => {
     });
 
     it('should not return duplicate elements', () => {
-        
+
     });
 
     it('should return elements in the order they appear in the document', () => {
-        
+
     });
 });
