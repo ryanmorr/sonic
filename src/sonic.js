@@ -7,7 +7,7 @@ const documentElement = doc.documentElement;
 /**
  * Parsing regular expressions
  */
-const splitRe = /\s*([>+]|~(?!=)|\s)\s*/;
+const splitRe = /\s*(>|\+(?!\d)|~(?!=)|\s)\s*/;
 const pseudoRe = /:([\w-]+)(?:\(([^)]*)\))?/g;
 
 /**
