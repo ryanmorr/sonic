@@ -204,7 +204,7 @@ export function matches(el, selector) {
  * @api public
  */
 export function find(selector, root) {
-    return query(selector, root)[0];
+    return query(selector, root)[0] || null;
 }
 
 /**
