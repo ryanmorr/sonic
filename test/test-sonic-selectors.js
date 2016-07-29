@@ -5,8 +5,8 @@ import { matches, find, query } from '../src/sonic';
 
 document.body.innerHTML = `
     <section id="section">
-        <div foo></div>
         <div id="unique" class="foo bar" baz="aaa" qux="some random text" lang="en-us"></div>
+        <div foo></div>
         <div foo="bar"></div>
         <div></div>
         <div></div>
@@ -45,6 +45,14 @@ document.body.innerHTML = `
         </div>
         <div class="bar" qux="some random text"></div>
         <span qux="some random text"></span>
+    </section>
+    <section id="section3">
+        <form>
+            <input type="checkbox" checked />
+            <input type="checkbox" checked />
+            <input type="checkbox" />
+            <input type="text" disabled />
+        </form>
     </section>
 `;
 
@@ -90,7 +98,7 @@ describe('sonic - find/query', () => {
 
     it('should support tag selectors', () => {
         batchCheckSelectors([
-            {selector: 'section', length: 3},
+            {selector: 'section', length: 4},
             {selector: 'div', length: 17},
             {selector: 'i', length: 3},
             {selector: 'li', length: 5},
@@ -132,7 +140,22 @@ describe('sonic - find/query', () => {
     });
 
     it('should support pseudo-class selectors', () => {
-
+        batchCheckSelectors([
+            {selector: ':first-child', context: document.body, length: 11},
+            {selector: ':last-child', context: document.body, length: 11},
+            {selector: ':only-child', context: document.body, length: 4},
+            {selector: ':first-of-type', context: document.querySelector('#section'), length: 5},
+            {selector: ':last-of-type', context: document.querySelector('#section'), length: 5},
+            {selector: ':only-of-type', context: document.querySelector('#section'), length: 2},
+            {selector: ':not([foo])', context: document.querySelector('#section'), length: 15},
+            {selector: ':checked', length: 2},
+            {selector: ':disabled', length: 1},
+            {selector: ':enabled', length: 3},
+            {selector: ':nth-child(4n+1)', context: document.querySelector('#section'), length: 7},
+            {selector: ':nth-last-child(-n+3)', context: document.querySelector('#section'), length: 10},
+            {selector: ':nth-last-of-type(2)', context: document.querySelector('#section'), length: 3},
+            {selector: ':nth-of-type(2n)', context: document.querySelector('#section'), length: 8}
+        ]);
     });
 
     it('should support custom pseudo-class selectors', () => {
