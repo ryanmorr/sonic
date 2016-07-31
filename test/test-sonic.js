@@ -217,31 +217,65 @@ describe('sonic', () => {
             it('should support :not()', () => {
                 batchCheckSelectors([
                     {selector: ':not([foo])', context: body, length: 26},
-                    {selector: ':not([foo])', context: group2, length: 12}
+                    {selector: ':not([foo])', context: group2, length: 12},
+                    {selector: ':not(span):not(div)', context: body, length: 19},
+                    {selector: ':not(span):not(div)', context: group1, length: 2}
                 ]);
             });
 
             it('should support :nth-child()', () => {
                 batchCheckSelectors([
-                    {selector: ':nth-child(4n+1)', context: group1, length: 4}
+                    {selector: ':nth-child(4n+1)', context: group1, length: 4},
+                    {selector: ':nth-child(-n+6)', context: group1, length: 14},
+                    {selector: ':nth-child(odd)', context: group1, length: 7},
+                    {selector: ':nth-child(even)', context: group1, length: 7},
+                    {selector: ':nth-child(3n)', context: group1, length: 4},
+                    {selector: ':nth-child(0n+1)', context: group1, length: 3},
+                    {selector: ':nth-child(4)', context: group1, length: 3},
+                    {selector: ':nth-child(-n+3)', context: group1, length: 9},
+                    {selector: ':nth-child(3n-2)', context: group1, length: 6}
                 ]);
             });
 
             it('should support :nth-last-child()', () => {
                 batchCheckSelectors([
-                    {selector: ':nth-last-child(-n+3)', context: group1, length: 9}
+                    {selector: ':nth-last-child(4n+1)', context: group2, length: 5},
+                    {selector: ':nth-last-child(-n+6)', context: group2, length: 12},
+                    {selector: ':nth-last-child(odd)', context: group2, length: 8},
+                    {selector: ':nth-last-child(even)', context: group2, length: 5},
+                    {selector: ':nth-last-child(3n)', context: group2, length: 3},
+                    {selector: ':nth-last-child(0n+1)', context: group2, length: 3},
+                    {selector: ':nth-last-child(4)', context: group2, length: 2},
+                    {selector: ':nth-last-child(-n+3)', context: group2, length: 7},
+                    {selector: ':nth-last-child(3n-2)', context: group2, length: 6}
                 ]);
             });
 
             it('should support :nth-last-of-type()', () => {
                 batchCheckSelectors([
-                    {selector: ':nth-last-of-type(2)', context: group1, length: 4}
+                    {selector: ':nth-last-of-type(4n+1)', context: group1, length: 6},
+                    {selector: ':nth-last-of-type(-n+6)', context: group1, length: 14},
+                    {selector: ':nth-last-of-type(odd)', context: group1, length: 8},
+                    {selector: ':nth-last-of-type(even)', context: group1, length: 6},
+                    {selector: ':nth-last-of-type(3n)', context: group1, length: 2},
+                    {selector: ':nth-last-of-type(0n+1)', context: group1, length: 6},
+                    {selector: ':nth-last-of-type(2)', context: group1, length: 4},
+                    {selector: ':nth-last-of-type(-n+3)', context: group1, length: 12},
+                    {selector: ':nth-last-of-type(3n-2)', context: group1, length: 8}
                 ]);
             });
 
             it('should support :nth-of-type()', () => {
                 batchCheckSelectors([
-                    {selector: ':nth-of-type(2n)', context: group1, length: 6}
+                    {selector: ':nth-of-type(4n+1)', context: group2, length: 8},
+                    {selector: ':nth-of-type(-n+6)', context: group2, length: 13},
+                    {selector: ':nth-of-type(odd)', context: group2, length: 10},
+                    {selector: ':nth-of-type(even)', context: group2, length: 3},
+                    {selector: ':nth-of-type(3n)', context: group2, length: 2},
+                    {selector: ':nth-of-type(0n+1)', context: group2, length: 7},
+                    {selector: ':nth-of-type(4)', context: group2, length: 1},
+                    {selector: ':nth-of-type(-n+3)', context: group2, length: 11},
+                    {selector: ':nth-of-type(3n-2)', context: group2, length: 8}
                 ]);
             });
 
