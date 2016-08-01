@@ -43,6 +43,7 @@ const combinators = {
      * @param {Element} context
      * @param {Object} token
      * @param {Array} results
+     * @return {Array}
      * @api private
      */
     ' ': function descendantCombinator(context, token, results) {
@@ -53,6 +54,7 @@ const combinators = {
                 results.push(el);
             }
         }
+        return results;
     },
 
     /**
@@ -62,6 +64,7 @@ const combinators = {
      * @param {Element} context
      * @param {Object} token
      * @param {Array} results
+     * @return {Array}
      * @api private
      */
     '>': function childCombinator(context, token, results) {
@@ -72,6 +75,7 @@ const combinators = {
                 results.push(el);
             }
         }
+        return results;
     },
 
     /**
@@ -81,6 +85,7 @@ const combinators = {
      * @param {Element} context
      * @param {Object} token
      * @param {Array} results
+     * @return {Array}
      * @api private
      */
     '+': function adjacentSiblingCombinator(context, token, results) {
@@ -88,6 +93,7 @@ const combinators = {
         if (el && matches(el, token.selector) && filter(el, token.filters)) {
             results.push(el);
         }
+        return results;
     },
 
     /**
@@ -97,6 +103,7 @@ const combinators = {
      * @param {Element} context
      * @param {Object} token
      * @param {Array} results
+     * @return {Array}
      * @api private
      */
     '~': function generalSiblingCombinator(context, token, results) {
@@ -107,6 +114,7 @@ const combinators = {
             }
             el = el.nextElementSibling;
         }
+        return results;
     }
 };
 
@@ -165,25 +173,6 @@ function tokenize(selectorString) {
 }
 
 /**
- * Convert a selector string into an
- * array of tokens
- *
- * @param {Array} nodes
- * @param {String} combinator
- * @param {Object} token
- * @return {Array}
- * @api private
- */
-function process(nodes, combinator, token) {
-    const results = [];
-    combinator = combinators[combinator];
-    for (let i = 0, len = nodes.length; i < len; i++) {
-        combinator(nodes[i], token, results);
-    }
-    return results;
-}
-
-/**
  * Does an element match a CSS selector string
  *
  * @param {Element} el
@@ -227,12 +216,12 @@ export function query(selector, root = doc) {
         let context = [root];
         const tokens = tokenize(groups[i]);
         while (tokens.length && context.length) {
-            const token = tokens.shift();
+            let token = tokens.shift(), combinator = combinators[' '];
             if (token in combinators) {
-                context = process(context, token, tokens.shift());
-            } else {
-                context = process(context, ' ', token);
+                combinator = combinators[token];
+                token = tokens.shift();
             }
+            context = context.reduce((nodes, el) => combinator(el, token, nodes), []);
         }
         results = results.concat(context);
     }
