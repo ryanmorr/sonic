@@ -70,6 +70,30 @@ describe('sonic', () => {
             });
         }
 
+        it('find should return null if no element is found', () => {
+
+        });
+
+        it('should be context-aware', () => {
+
+        });
+
+        it('should support a contextual element as an optional second argument', () => {
+
+        });
+
+        it('should support a selector string for a contextual element as an optional second argument', () => {
+
+        });
+
+        it('should not return duplicate elements', () => {
+
+        });
+
+        it('should return elements in the order they appear in the document', () => {
+
+        });
+
         it('should support tag selectors', () => {
             checkSelectors([
                 {selector: 'section', length: 4},
@@ -81,7 +105,6 @@ describe('sonic', () => {
             checkSelectors([
                 {selector: '#group-1', length: 1},
                 {selector: '#element-1', length: 1},
-                {selector: '#group-2', length: 1},
                 {selector: '#group-1', context: group1, length: 0}
             ]);
         });
@@ -91,9 +114,16 @@ describe('sonic', () => {
                 {selector: '.class1', length: 3},
                 {selector: '.class1.class2', length: 3},
                 {selector: '.class1.class2.class3', length: 1},
-                {selector: '.list-item', length: 5},
                 {selector: '.class1.class2', context: group1, length: 2}
             ]);
+        });
+
+        it('should support multiple selectors', () => {
+
+        });
+
+        it('should support complex selectors', () => {
+
         });
 
         describe('attribute selectors', () => {
@@ -339,38 +369,6 @@ describe('sonic', () => {
                     {selector: '~ div', context: element1, expected: body.querySelectorAll('#group-1 > :first-child ~ div'), length: 3}
                 ]);
             });
-        });
-
-        it('find should return null if no element is found', () => {
-
-        });
-
-        it('should be context-aware', () => {
-
-        });
-
-        it('should support a contextual element as an optional second argument', () => {
-
-        });
-
-        it('should support a selector string for a contextual element as an optional second argument', () => {
-
-        });
-
-        it('should not return duplicate elements', () => {
-
-        });
-
-        it('should return elements in the order they appear in the document', () => {
-
-        });
-
-        it('should support multiple selectors', () => {
-
-        });
-
-        it('should support complex selectors', () => {
-
         });
     });
 });
