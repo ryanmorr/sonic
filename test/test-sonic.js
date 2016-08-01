@@ -83,11 +83,11 @@ describe('sonic', () => {
         }
 
         it('query should return an array', () => {
-
+            expect(query('div')).to.be.an('array');
         });
 
         it('find should return null if no element is found', () => {
-
+            expect(find('#foobar')).to.be.a('null');
         });
 
         it('should be context-aware', () => {
