@@ -212,9 +212,9 @@ export function query(selector, root = doc) {
     }
     let results = [];
     const groups = selector.trim().split(groupRe);
-    for (let i = 0, len = groups.length; i < len; i++) {
+    while (groups.length) {
         let context = [root];
-        const tokens = tokenize(groups[i]);
+        const tokens = tokenize(groups.shift());
         while (tokens.length && context.length) {
             let token = tokens.shift(), combinator = combinators[' '];
             if (token in combinators) {
