@@ -123,7 +123,12 @@ describe('sonic', () => {
         });
 
         it('should accept selector strings with leading/trailing spaces', () => {
-
+            checkSelectors([
+                {selector: ' div', length: 9},
+                {selector: 'div ', length: 9},
+                {selector: ' div ', length: 9},
+                {selector: '  div   ', length: 9}
+            ]);
         });
 
         it('should support the universal selector (*)', () => {
