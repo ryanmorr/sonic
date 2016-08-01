@@ -94,6 +94,13 @@ describe('sonic', () => {
 
         });
 
+        it('should support the universal selector (*)', () => {
+            checkSelectors([
+                {selector: '*', context: body, length: 35},
+                {selector: '*', context: group1, length: 14}
+            ]);
+        });
+
         it('should support tag selectors', () => {
             checkSelectors([
                 {selector: 'section', length: 4},
