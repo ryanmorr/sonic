@@ -9,6 +9,7 @@ const documentElement = doc.documentElement;
  */
 const splitRe = /\s*(>|\+(?!\d)|~(?!=)|\s)\s*/;
 const pseudoRe = /:([\w-]+)(?:\(([^)]*)\))?/g;
+const groupRe = /\s*,\s*/;
 
 /**
  * Feature test for the browser's implementation
@@ -220,18 +221,22 @@ export function query(selector, root = doc) {
     if (typeof root === 'string') {
         root = find(root);
     }
-    selector.trim();
-    let context = [root];
-    const tokens = tokenize(selector);
-    while (tokens.length && context.length) {
-        const token = tokens.shift();
-        if (token in combinators) {
-            context = process(context, token, tokens.shift());
-        } else {
-            context = process(context, ' ', token);
+    let results = [];
+    const groups = selector.trim().split(groupRe);
+    for (let i = 0, len = groups.length; i < len; i++) {
+        let context = [root];
+        const tokens = tokenize(groups[i]);
+        while (tokens.length && context.length) {
+            const token = tokens.shift();
+            if (token in combinators) {
+                context = process(context, token, tokens.shift());
+            } else {
+                context = process(context, ' ', token);
+            }
         }
+        results = results.concat(context);
     }
-    return context.sort((a, b) => 3 - (a.compareDocumentPosition(b) & 6));
+    return results.sort((a, b) => 3 - (a.compareDocumentPosition(b) & 6));
 }
 
 /**

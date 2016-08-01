@@ -126,7 +126,10 @@ describe('sonic', () => {
         });
 
         it('should support multiple selectors', () => {
-
+            checkSelectors([
+                {selector: 'div, span', length: 16},
+                {selector: 'span, em, i', context: group1, length: 8}
+            ]);
         });
 
         it('should support complex selectors', () => {
