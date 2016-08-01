@@ -210,7 +210,7 @@ export function query(selector, root = doc) {
     if (typeof root === 'string') {
         root = find(root);
     }
-    let results = [];
+    const results = [];
     const groups = selector.trim().split(groupRe);
     while (groups.length) {
         let context = [root];
@@ -223,7 +223,11 @@ export function query(selector, root = doc) {
             }
             context = context.reduce((nodes, el) => combinator(el, token, nodes), []);
         }
-        results = results.concat(context);
+        context.forEach((el) => {
+            if (results.indexOf(el) === -1) {
+                results.push(el);
+            }
+        });
     }
     return results.sort((a, b) => 3 - (a.compareDocumentPosition(b) & 6));
 }

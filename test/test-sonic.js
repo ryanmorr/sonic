@@ -115,7 +115,12 @@ describe('sonic', () => {
         });
 
         it('should not return duplicate elements', () => {
-
+            const cache = [];
+            const elements = query('div, [foo]');
+            elements.forEach((el) => {
+                expect(cache).to.not.include(el);
+                cache.push(el);
+            });
         });
 
         it('should return elements in the order they appear in the document', () => {
@@ -167,10 +172,6 @@ describe('sonic', () => {
                 {selector: 'div, span', length: 16},
                 {selector: 'span, em, i', context: group1, length: 8}
             ]);
-        });
-
-        it('should support complex selectors', () => {
-
         });
 
         describe('attribute selectors', () => {
