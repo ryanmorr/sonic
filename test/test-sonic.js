@@ -46,6 +46,18 @@ describe('sonic', () => {
             ];
             selectors.forEach((selector) => expect(matches(element1, selector)).to.equal(true));
         });
+
+        it('should return false for an element with a non-matching selector string', () => {
+            const selectors = [
+                'span',
+                '#element',
+                '.class12',
+                ':last-child',
+                '[foo]',
+                ':last-child'
+            ];
+            selectors.forEach((selector) => expect(matches(element1, selector)).to.equal(false));
+        });
     });
 
     describe('find/query', () => {
