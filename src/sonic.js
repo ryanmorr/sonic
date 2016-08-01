@@ -231,7 +231,7 @@ export function query(selector, root = doc) {
             context = process(context, ' ', token);
         }
     }
-    return context;
+    return context.sort((a, b) => 3 - (a.compareDocumentPosition(b) & 6));
 }
 
 /**
