@@ -1,7 +1,7 @@
 /* eslint-disable max-len, no-unused-expressions */
 
 import { expect } from 'chai';
-import { body, group1, group2, group3 } from './html';
+import { body, group1, group2, group3, element1 } from './html';
 import sonic, { matches, find, query, pseudos } from '../src/sonic';
 
 describe('sonic', () => {
@@ -26,7 +26,6 @@ describe('sonic', () => {
 
     describe('matches', () => {
         it('should return true for an element with a matching selector string', () => {
-            const element = document.querySelector('#element-1');
             const selectors = [
                 'div',
                 '#element-1',
@@ -45,15 +44,18 @@ describe('sonic', () => {
                 ':first-child',
                 'div#element-1.class1.class2.class3[attr=value][attr2="some random text"][lang="en-us"]'
             ];
-            selectors.forEach((selector) => expect(matches(element, selector)).to.equal(true));
+            selectors.forEach((selector) => expect(matches(element1, selector)).to.equal(true));
         });
     });
 
     describe('find/query', () => {
-        function batchCheckSelectors(items) {
+        function checkSelectors(items) {
             items.forEach((item) => {
                 const context = item.context || document;
-                const expected = context.querySelectorAll(item.selector);
+                let expected = item.expected;
+                if (!expected) {
+                    expected = context.querySelectorAll(item.selector);
+                }
                 const element = find(item.selector, context);
                 const elements = query(item.selector, context);
                 checkElements(expected, element, elements, item.length);
@@ -69,14 +71,14 @@ describe('sonic', () => {
         }
 
         it('should support tag selectors', () => {
-            batchCheckSelectors([
+            checkSelectors([
                 {selector: 'section', length: 4},
                 {selector: 'div', context: group1, length: 6}
             ]);
         });
 
         it('should support id selectors', () => {
-            batchCheckSelectors([
+            checkSelectors([
                 {selector: '#group-1', length: 1},
                 {selector: '#element-1', length: 1},
                 {selector: '#group-2', length: 1},
@@ -85,7 +87,7 @@ describe('sonic', () => {
         });
 
         it('should support class selectors', () => {
-            batchCheckSelectors([
+            checkSelectors([
                 {selector: '.class1', length: 3},
                 {selector: '.class1.class2', length: 3},
                 {selector: '.class1.class2.class3', length: 1},
@@ -96,7 +98,7 @@ describe('sonic', () => {
 
         describe('attribute selectors', () => {
             it('should support [attr]', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: '[foo]', length: 9},
                     {selector: '[attr][attr2]', length: 2},
                     {selector: '[attr][attr2][lang]', length: 1},
@@ -105,7 +107,7 @@ describe('sonic', () => {
             });
 
             it('should support [attr=value]', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: '[attr=value]', length: 2},
                     {selector: '[attr="value"]', length: 2},
                     {selector: "[attr='value']", length: 2},
@@ -115,35 +117,35 @@ describe('sonic', () => {
             });
 
             it('should support [attr~=value]', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: '[attr2~="random"]', length: 3},
                     {selector: '[attr2~="random"]', context: group2, length: 2}
                 ]);
             });
 
             it('should support [attr|=value]', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: '[lang|="en"]', length: 2},
                     {selector: '[lang|="en"]', context: group2, length: 0}
                 ]);
             });
 
             it('should support [attr^=value]', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: '[attr2^="some"]', length: 3},
                     {selector: '[attr2^="some"]', context: group2, length: 2}
                 ]);
             });
 
             it('should support [attr$=value]', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: '[attr2$="text"]', length: 3},
                     {selector: '[attr2$="text"]', context: group2, length: 2}
                 ]);
             });
 
             it('should support [attr*=value]', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: '[attr2*="rand"]', length: 3},
                     {selector: '[attr2*="rand"]', context: group2, length: 2}
                 ]);
@@ -152,70 +154,70 @@ describe('sonic', () => {
 
         describe('pseudo-class selectors', () => {
             it('should support :first-child', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':first-child', context: body, length: 9},
                     {selector: ':first-child', context: group1, length: 3}
                 ]);
             });
 
             it('should support :last-child', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':last-child', context: body, length: 9},
                     {selector: ':last-child', context: group1, length: 3}
                 ]);
             });
 
             it('should support :only-child', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':only-child', context: body, length: 2},
                     {selector: ':only-child', context: group2, length: 1}
                 ]);
             });
 
             it('should support :first-of-type', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':first-of-type', context: body, length: 16},
                     {selector: ':first-of-type', context: group3, length: 2}
                 ]);
             });
 
             it('should support :last-of-type', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':last-of-type', context: body, length: 16},
                     {selector: ':last-of-type', context: group1, length: 6}
                 ]);
             });
 
             it('should support :only-of-type', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':only-of-type', context: body, length: 8},
                     {selector: ':only-of-type', context: group2, length: 5}
                 ]);
             });
 
             it('should support :checked', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':checked', length: 2},
                     {selector: ':checked', context: group2, length: 0}
                 ]);
             });
 
             it('should support :disabled', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':disabled', length: 1},
                     {selector: ':disabled', context: group1, length: 0}
                 ]);
             });
 
             it('should support :enabled', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':enabled', length: 3},
                     {selector: ':enabled', context: group2, length: 0}
                 ]);
             });
 
             it('should support :not()', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':not([foo])', context: body, length: 26},
                     {selector: ':not([foo])', context: group2, length: 12},
                     {selector: ':not(span):not(div)', context: body, length: 19},
@@ -224,7 +226,7 @@ describe('sonic', () => {
             });
 
             it('should support :nth-child()', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':nth-child(4n+1)', context: group1, length: 4},
                     {selector: ':nth-child(-n+6)', context: group1, length: 14},
                     {selector: ':nth-child(odd)', context: group1, length: 7},
@@ -238,7 +240,7 @@ describe('sonic', () => {
             });
 
             it('should support :nth-last-child()', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':nth-last-child(4n+1)', context: group2, length: 5},
                     {selector: ':nth-last-child(-n+6)', context: group2, length: 12},
                     {selector: ':nth-last-child(odd)', context: group2, length: 8},
@@ -252,7 +254,7 @@ describe('sonic', () => {
             });
 
             it('should support :nth-last-of-type()', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':nth-last-of-type(4n+1)', context: group1, length: 6},
                     {selector: ':nth-last-of-type(-n+6)', context: group1, length: 14},
                     {selector: ':nth-last-of-type(odd)', context: group1, length: 8},
@@ -266,7 +268,7 @@ describe('sonic', () => {
             });
 
             it('should support :nth-of-type()', () => {
-                batchCheckSelectors([
+                checkSelectors([
                     {selector: ':nth-of-type(4n+1)', context: group2, length: 8},
                     {selector: ':nth-of-type(-n+6)', context: group2, length: 13},
                     {selector: ':nth-of-type(odd)', context: group2, length: 10},
@@ -285,44 +287,61 @@ describe('sonic', () => {
         });
 
         describe('combinator selectors', () => {
-            it('should support decendant combinator (+) selectors', () => {
-
+            it('should support decendant combinator (+)', () => {
+                checkSelectors([
+                    {selector: 'section div', length: 9},
+                    {selector: 'section div span', length: 6},
+                    {selector: 'div div', context: group1, length: 2}
+                ]);
             });
 
-            it('should support child combinator (>) selectors', () => {
-
+            it('should support child combinator (>)', () => {
+                checkSelectors([
+                    {selector: 'section > div', length: 7},
+                    {selector: 'section > div > span[foo]', length: 4},
+                    {selector: 'ul > .list-item', context: group2, length: 5}
+                ]);
             });
 
-            it('should support starting child combinator (>) selectors', () => {
-
+            it('should support starting child combinator (>)', () => {
+                checkSelectors([
+                    {selector: '> div', context: group1, expected: body.querySelectorAll('#group-1 > div'), length: 4},
+                    {selector: '> div > i', context: group1, expected: body.querySelectorAll('#group-1 > div > i'), length: 1}
+                ]);
             });
 
-            it('should support adjacent sibling combinator (+) selectors', () => {
-
+            it('should support adjacent sibling combinator (+)', () => {
+                checkSelectors([
+                    {selector: 'div[foo] + div', length: 1},
+                    {selector: 'div + i + em + span', length: 1},
+                    {selector: '.list-item + .list-item', context: group2, length: 4}
+                ]);
             });
 
-            it('should support starting adjacent sibling combinator (+) selectors', () => {
-
+            it('should support starting adjacent sibling combinator (+)', () => {
+                checkSelectors([
+                    {selector: '+ section', context: group1, expected: body.querySelectorAll('#group-1 + section'), length: 1},
+                    {selector: '+ div', context: element1, expected: body.querySelectorAll('#group-1 > :first-child + div'), length: 1}
+                ]);
             });
 
-            it('should support general sibling combinator (~) selectors', () => {
-
+            it('should support general sibling combinator (~)', () => {
+                checkSelectors([
+                    {selector: 'div[foo] ~ div', context: body, length: 4},
+                    {selector: 'div ~ em ~ span', context: body, length: 2},
+                    {selector: 'h1 ~ [attr2]', context: group2, length: 2}
+                ]);
             });
 
-            it('should support starting general sibling combinator (~) selectors', () => {
-
+            it('should support starting general sibling combinator (~)', () => {
+                checkSelectors([
+                    {selector: '~ section', context: group1, expected: body.querySelectorAll('#group-1 ~ section'), length: 2},
+                    {selector: '~ div', context: element1, expected: body.querySelectorAll('#group-1 > :first-child ~ div'), length: 3}
+                ]);
             });
         });
 
         it('find should return null if no element is found', () => {
-
-        });
-
-        it('should support multiple selectors', () => {
-
-        });
-
-        it('should support complex selectors', () => {
 
         });
 
@@ -343,6 +362,14 @@ describe('sonic', () => {
         });
 
         it('should return elements in the order they appear in the document', () => {
+
+        });
+
+        it('should support multiple selectors', () => {
+
+        });
+
+        it('should support complex selectors', () => {
 
         });
     });

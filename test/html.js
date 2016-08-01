@@ -54,3 +54,4 @@ export const body = document.body;
 export const group1 = document.querySelector('#group-1');
 export const group2 = document.querySelector('#group-2');
 export const group3 = document.querySelector('#group-3');
+export const element1 = document.querySelector('#element-1');
