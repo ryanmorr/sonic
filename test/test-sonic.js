@@ -116,7 +116,7 @@ describe('sonic', () => {
 
         it('should not return duplicate elements', () => {
             const cache = [];
-            const elements = query('div, [foo]');
+            const elements = query('div, div');
             elements.forEach((el) => {
                 expect(cache).to.not.include(el);
                 cache.push(el);
