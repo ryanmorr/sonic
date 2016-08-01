@@ -364,7 +364,12 @@ describe('sonic', () => {
             });
 
             it('should support custom pseudo-class selectors', () => {
-
+                pseudos.foo = (el) => el.hasAttribute('foo');
+                pseudos.bar = (el, name) => el.hasAttribute(name);
+                checkSelectors([
+                    {selector: ':foo', expected: body.querySelectorAll('[foo]'), length: 9},
+                    {selector: ':bar(lang)', expected: body.querySelectorAll('[lang]'), length: 2}
+                ]);
             });
         });
 

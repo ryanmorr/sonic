@@ -166,6 +166,7 @@ function tokenize(selectorString) {
                 }
                 return all;
             });
+            selector = selector === '' ? '*' : selector;
             tokens.push({selector, filters});
         }
         return tokens;
