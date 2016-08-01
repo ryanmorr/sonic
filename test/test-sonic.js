@@ -91,15 +91,27 @@ describe('sonic', () => {
         });
 
         it('should be context-aware', () => {
-
+            const expected = document.querySelector('#section2 section h1');
+            const element = find('section h1', group1);
+            expect(element).to.equal(expected);
         });
 
         it('should support a contextual element as an optional second argument', () => {
-
+            const expected = group1.querySelectorAll('div');
+            const elements = query('div', group1);
+            elements.forEach((el, i) => {
+                expect(group1.contains(el)).to.equal(true);
+                expect(el).to.equal(expected[i]);
+            });
         });
 
         it('should support a selector string for a contextual element as an optional second argument', () => {
-
+            const expected = group1.querySelectorAll('div');
+            const elements = query('div', '#group-1');
+            elements.forEach((el, i) => {
+                expect(group1.contains(el)).to.equal(true);
+                expect(el).to.equal(expected[i]);
+            });
         });
 
         it('should not return duplicate elements', () => {
