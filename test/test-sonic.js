@@ -70,6 +70,10 @@ describe('sonic', () => {
             });
         }
 
+        it('query should return an array', () => {
+
+        });
+
         it('find should return null if no element is found', () => {
 
         });
@@ -91,6 +95,10 @@ describe('sonic', () => {
         });
 
         it('should return elements in the order they appear in the document', () => {
+
+        });
+
+        it('should accept selector strings with leading/trailing spaces', () => {
 
         });
 
