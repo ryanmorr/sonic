@@ -91,8 +91,9 @@ describe('sonic', () => {
         });
 
         it('should be context-aware', () => {
-            const expected = document.querySelector('#section2 section h1');
-            const element = find('section h1', group1);
+            const expected = document.querySelector('#group-2 section h1');
+            const element = find('section h1', group2);
+            expect(element).to.not.be.a('null');
             expect(element).to.equal(expected);
         });
 
