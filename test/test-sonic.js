@@ -124,7 +124,11 @@ describe('sonic', () => {
         });
 
         it('should return elements in the order they appear in the document', () => {
-
+            const elements = query('div');
+            const expected = elements.slice().sort((a, b) => 3 - (a.compareDocumentPosition(b) & 6));
+            elements.forEach((el, i) => {
+                expect(el).to.equal(expected[i]);
+            });
         });
 
         it('should accept selector strings with leading/trailing spaces', () => {
