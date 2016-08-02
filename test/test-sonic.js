@@ -392,7 +392,7 @@ describe('sonic', () => {
                 ]);
             });
 
-            it('should support starting child combinator (>)', () => {
+            it('should support leading child combinator (>)', () => {
                 checkSelectors([
                     {selector: '> div', context: group1, expected: body.querySelectorAll('#group-1 > div'), length: 4},
                     {selector: '>div', context: group2, expected: body.querySelectorAll('#group-2 > div'), length: 3},
@@ -409,7 +409,7 @@ describe('sonic', () => {
                 ]);
             });
 
-            it('should support starting adjacent sibling combinator (+)', () => {
+            it('should support leading adjacent sibling combinator (+)', () => {
                 checkSelectors([
                     {selector: '+ section', context: group1, expected: body.querySelectorAll('#group-1 + section'), length: 1},
                     {selector: '+ div', context: element1, expected: body.querySelectorAll('#group-1 > :first-child + div'), length: 1},
@@ -426,7 +426,7 @@ describe('sonic', () => {
                 ]);
             });
 
-            it('should support starting general sibling combinator (~)', () => {
+            it('should support leading general sibling combinator (~)', () => {
                 checkSelectors([
                     {selector: '~ section', context: group1, expected: body.querySelectorAll('#group-1 ~ section'), length: 2},
                     {selector: '~ div', context: element1, expected: body.querySelectorAll('#group-1 > :first-child ~ div'), length: 3},
