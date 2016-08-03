@@ -1,7 +1,6 @@
 # sonic
 [![GitHub version](https://badge.fury.io/gh/ryanmorr%2Fsonic.svg)](https://badge.fury.io/gh/ryanmorr%2Fsonic) [![Build Status](https://travis-ci.org/ryanmorr/sonic.svg)](https://travis-ci.org/ryanmorr/sonic) ![Size](https://badge-size.herokuapp.com/ryanmorr/sonic/master/dist/sonic.min.js.svg?color=blue&label=file%20size)
 
-
 > A modern, context-aware, and extendable CSS selector engine built on top of `querySelectorAll`.
 
 ## Usage
@@ -24,11 +23,10 @@ Check if an element matches a selector string:
 sonic.matches(element, 'div.class[attr=value]');
 ```
 
-Provide an element or selector string as an optional second argument to use as the root of the query instead of the default (`document`):
+Provide an element or selector string as an optional second argument as the root of the query:
 
 ``` javascript
-sonic.query('[attr]', element);
-
+sonic.find('[attr]', element);
 sonic.query(':first-child', '#header');
 ```
 
@@ -36,7 +34,11 @@ Use leading combinators:
 
 ``` javascript
 sonic.query('> div');
+sonic.query('+ .block');
+sonic.query('~ :checked');
 ```
+
+## Extendable
 
 Create custom pseudo-class selectors (must return a boolean):
 
@@ -71,47 +73,12 @@ Sonic addresses the long-standing flaw in `querySelector` and `querySelectorAll`
 document.querySelector('#container').querySelector('section em');
 ```
 
-Apparently, this behavior is purported to be correct given how long it has endured. Sonic, on the other hand, abides by the principle of least surprise, and gives you exactly what you expect:
+Apparently, this behavior is purported to be correct given how long it has endured. Sonic, on the other hand, abides by the principle of least surprise and gives you exactly what you expect.
 
 ``` javascript
 // returns <em>Level 2</em> as expected, hooray!
 sonic.query('section em', '#container');
 ```
-
-## API
-
-### find
-
-Finds a single element matching the provided selector string.
-
-###### Arguments
-* `selector` (String) The CSS selector string to match elements against.
-* `root` (String/Element) The contextual element of the search (optional, `document` is default).
-
-###### Returns
-(Element/Null) The first element matching the selector string or null if none is found.
-
-### query
-
-Find all the elements matching the provided selector string.
-
-###### Arguments
-* `selector` (String) The CSS selector string to match elements against.
-* `root` (String/Element) The contextual element of the search (optional, `document` is default).
-
-###### Returns
-(Array) An array of all elements matching the selector string in document order.
-
-### matches
-
-Check if an element matches the provided selector string.
-
-###### Arguments
-* `element` (Element) The DOM element to match the selector string against.
-* `selector` (String) The CSS selector string to match the element against.
-
-###### Returns
-(Boolean) True if the element matches the selector string, false otherwise.
 
 ## Installation
 
