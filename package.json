@@ -1,5 +1,5 @@
 {
-  "name": "Sonic",
+  "name": "sonic",
   "description": "A modern, context-aware, and extendable CSS selector engine built on top of querySelectorAll",
   "version": "0.1.0",
   "license": "Unlicense",
