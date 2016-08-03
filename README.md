@@ -1,4 +1,6 @@
 # sonic
+[![GitHub version](https://badge.fury.io/gh/ryanmorr%2Fsonic.svg)](https://badge.fury.io/gh/ryanmorr%2Fsonic) [![Build Status](https://travis-ci.org/ryanmorr/sonic.svg)](https://travis-ci.org/ryanmorr/sonic) ![Size](https://badge-size.herokuapp.com/ryanmorr/sonic/master/dist/sonic.min.js.svg?color=blue&label=file%20size)
+
 
 > A modern, context-aware, and extendable CSS selector engine built on top of `querySelectorAll`.
 
