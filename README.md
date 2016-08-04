@@ -92,7 +92,7 @@ bower install ryanmorr/sonic
 
 ## Tests
 
-Test with PhantomJS by issuing the following commands:
+Run unit tests by issuing the following commands:
 
 ``` sh
 npm install
