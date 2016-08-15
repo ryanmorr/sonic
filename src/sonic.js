@@ -126,7 +126,7 @@ const combinators = {
 /**
  * Export pseudo-class map for custom filters
  */
-export const pseudos = {};
+export const pseudos = Object.create(null);
 
 /**
  * Run all the custom filters against an
