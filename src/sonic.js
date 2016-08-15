@@ -42,6 +42,8 @@ const combinators = {
      *
      * @param {Element} context
      * @param {Object} token
+     * @param {String} token.selector
+     * @param {Array} token.filters
      * @param {Array} results
      * @return {Array}
      * @api private
@@ -63,6 +65,8 @@ const combinators = {
      *
      * @param {Element} context
      * @param {Object} token
+     * @param {String} token.selector
+     * @param {Array} token.filters
      * @param {Array} results
      * @return {Array}
      * @api private
@@ -84,6 +88,8 @@ const combinators = {
      *
      * @param {Element} context
      * @param {Object} token
+     * @param {String} token.selector
+     * @param {Array} token.filters
      * @param {Array} results
      * @return {Array}
      * @api private
@@ -102,6 +108,8 @@ const combinators = {
      *
      * @param {Element} context
      * @param {Object} token
+     * @param {String} token.selector
+     * @param {Array} token.filters
      * @param {Array} results
      * @return {Array}
      * @api private
@@ -191,7 +199,7 @@ export function matches(el, selector) {
  *
  * @param {String} selector
  * @param {Element|String} root
- * @return {Element}
+ * @return {Element|Null}
  * @api public
  */
 export function find(selector, root) {
@@ -204,7 +212,7 @@ export function find(selector, root) {
  *
  * @param {String} selector
  * @param {Element|String} root
- * @return {Element}
+ * @return {Array}
  * @api public
  */
 export function query(selector, root = doc) {
