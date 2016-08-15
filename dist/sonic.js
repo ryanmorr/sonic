@@ -1,4 +1,4 @@
-/*! sonic v0.2.0 | https://github.com/ryanmorr/sonic */
+/*! sonic v0.2.1 | https://github.com/ryanmorr/sonic */
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.sonic = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
@@ -16,6 +16,7 @@ exports.query = query;
  */
 var doc = window.document;
 var documentElement = doc.documentElement;
+var arrayFilter = [].filter;
 
 /**
  * Parsing regular expressions
@@ -48,19 +49,16 @@ var combinators = {
      *
      * @param {Element} context
      * @param {Object} token
+     * @param {String} token.selector
+     * @param {Array} token.filters
      * @param {Array} results
      * @return {Array}
      * @api private
      */
     ' ': function descendantCombinator(context, token, results) {
-        var elements = context.querySelectorAll(token.selector);
-        for (var i = 0, len = elements.length, el; i < len; i++) {
-            el = elements[i];
-            if (filter(el, token.filters)) {
-                results.push(el);
-            }
-        }
-        return results;
+        return results.concat(arrayFilter.call(context.querySelectorAll(token.selector), function (el) {
+            return filter(el, token.filters);
+        }));
     },
 
     /**
@@ -69,19 +67,16 @@ var combinators = {
      *
      * @param {Element} context
      * @param {Object} token
+     * @param {String} token.selector
+     * @param {Array} token.filters
      * @param {Array} results
      * @return {Array}
      * @api private
      */
     '>': function childCombinator(context, token, results) {
-        var elements = context.querySelectorAll(token.selector);
-        for (var i = 0, len = elements.length, el; i < len; i++) {
-            el = elements[i];
-            if (el.parentNode === context && filter(el, token.filters)) {
-                results.push(el);
-            }
-        }
-        return results;
+        return results.concat(arrayFilter.call(context.querySelectorAll(token.selector), function (el) {
+            return el.parentNode === context && filter(el, token.filters);
+        }));
     },
 
     /**
@@ -90,6 +85,8 @@ var combinators = {
      *
      * @param {Element} context
      * @param {Object} token
+     * @param {String} token.selector
+     * @param {Array} token.filters
      * @param {Array} results
      * @return {Array}
      * @api private
@@ -108,6 +105,8 @@ var combinators = {
      *
      * @param {Element} context
      * @param {Object} token
+     * @param {String} token.selector
+     * @param {Array} token.filters
      * @param {Array} results
      * @return {Array}
      * @api private
@@ -127,7 +126,7 @@ var combinators = {
 /**
  * Export pseudo-class map for custom filters
  */
-var pseudos = exports.pseudos = {};
+var pseudos = exports.pseudos = Object.create(null);
 
 /**
  * Run all the custom filters against an
@@ -203,7 +202,7 @@ function matches(el, selector) {
  *
  * @param {String} selector
  * @param {Element|String} root
- * @return {Element}
+ * @return {Element|Null}
  * @api public
  */
 function find(selector, root) {
@@ -216,7 +215,7 @@ function find(selector, root) {
  *
  * @param {String} selector
  * @param {Element|String} root
- * @return {Element}
+ * @return {Array}
  * @api public
  */
 function query(selector) {
