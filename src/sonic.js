@@ -3,7 +3,7 @@
  */
 const doc = window.document;
 const documentElement = doc.documentElement;
-const reduce = [].reduce;
+const arrayFilter = [].filter;
 
 /**
  * Parsing regular expressions
@@ -50,12 +50,9 @@ const combinators = {
      * @api private
      */
     ' ': function descendantCombinator(context, token, results) {
-        return reduce.call(context.querySelectorAll(token.selector), (results, el) => {
-            if (filter(el, token.filters)) {
-                results.push(el);
-            }
-            return results;
-        }, results);
+        return results.concat(arrayFilter.call(context.querySelectorAll(token.selector), (el) => {
+            return filter(el, token.filters);
+        }));
     },
 
     /**
@@ -71,12 +68,9 @@ const combinators = {
      * @api private
      */
     '>': function childCombinator(context, token, results) {
-        return reduce.call(context.querySelectorAll(token.selector), (results, el) => {
-            if (el.parentNode === context && filter(el, token.filters)) {
-                results.push(el);
-            }
-            return results;
-        }, results);
+        return results.concat(arrayFilter.call(context.querySelectorAll(token.selector), (el) => {
+            return el.parentNode === context && filter(el, token.filters);
+        }));
     },
 
     /**
