@@ -94,7 +94,7 @@ const combinators = {
     },
 
     /**
-     * Find all general sibling element of the
+     * Find all general sibling elements of the
      * context matching the token
      *
      * @param {Element} context
@@ -123,8 +123,9 @@ const combinators = {
 export const pseudos = Object.create(null);
 
 /**
- * Run all the custom filters against an
- * element to determine if it is a match
+ * Test an element against the custom
+ * pseudo-classes (if any) to determine if it
+ * is a match
  *
  * @param {Element} el
  * @param {Array} filters
@@ -189,7 +190,7 @@ export function matches(el, selector) {
  * selector string
  *
  * @param {String} selector
- * @param {Element|String} root
+ * @param {Element|String} root (optional)
  * @return {Element|Null}
  * @api public
  */
@@ -202,7 +203,7 @@ export function find(selector, root) {
  * CSS selector string
  *
  * @param {String} selector
- * @param {Element|String} root
+ * @param {Element|String} root (optional)
  * @return {Array}
  * @api public
  */
