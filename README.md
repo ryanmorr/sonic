@@ -1,5 +1,10 @@
 # sonic
-[![GitHub version](https://badge.fury.io/gh/ryanmorr%2Fsonic.svg)](https://badge.fury.io/gh/ryanmorr%2Fsonic) [![Build Status](https://travis-ci.org/ryanmorr/sonic.svg)](https://travis-ci.org/ryanmorr/sonic) ![Size](https://badge-size.herokuapp.com/ryanmorr/sonic/master/dist/sonic.min.js.svg?color=blue&label=file%20size)
+
+[![Version Badge][version-image]][project-url]
+[![Build Status][build-image]][build-url]
+[![Dependencies][dependencies-image]][project-url]
+[![License][license-image]][license-url]
+[![File Size][file-size-image]][project-url]
 
 > A modern, context-aware, and extendable CSS selector engine built on top of `querySelectorAll`.
 
@@ -103,3 +108,12 @@ gulp test
 ## License
 
 This project is dedicated to the public domain as described by the [Unlicense](http://unlicense.org/).
+
+[project-url]: https://github.com/ryanmorr/sonic
+[version-image]: https://badge.fury.io/gh/ryanmorr%2Fsonic.svg
+[build-url]: https://travis-ci.org/ryanmorr/sonic
+[build-image]: https://travis-ci.org/ryanmorr/sonic.svg
+[dependencies-image]: https://david-dm.org/ryanmorr/sonic.svg
+[license-image]: https://img.shields.io/badge/license-Unlicense-blue.svg
+[license-url]: UNLICENSE
+[file-size-image]: https://badge-size.herokuapp.com/ryanmorr/sonic/master/dist/sonic.min.js.svg?color=blue&label=file%20size
