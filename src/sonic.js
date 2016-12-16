@@ -49,7 +49,7 @@ const combinators = {
      * @return {Array}
      * @api private
      */
-    ' ': function descendantCombinator(context, token, results) {
+    ' ': (context, token, results) => {
         return results.concat(arrayFilter.call(context.querySelectorAll(token.selector), (el) => {
             return filter(el, token.filters);
         }));
@@ -67,7 +67,7 @@ const combinators = {
      * @return {Array}
      * @api private
      */
-    '>': function childCombinator(context, token, results) {
+    '>': (context, token, results) => {
         return results.concat(arrayFilter.call(context.querySelectorAll(token.selector), (el) => {
             return el.parentNode === context && filter(el, token.filters);
         }));
@@ -85,7 +85,7 @@ const combinators = {
      * @return {Array}
      * @api private
      */
-    '+': function adjacentSiblingCombinator(context, token, results) {
+    '+': (context, token, results) => {
         const el = context.nextElementSibling;
         if (el && matches(el, token.selector) && filter(el, token.filters)) {
             results.push(el);
@@ -105,7 +105,7 @@ const combinators = {
      * @return {Array}
      * @api private
      */
-    '~': function generalSiblingCombinator(context, token, results) {
+    '~': (context, token, results) => {
         let el = context.nextElementSibling;
         while (el) {
             if (matches(el, token.selector) && filter(el, token.filters)) {
