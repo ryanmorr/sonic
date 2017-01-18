@@ -1,7 +1,7 @@
 {
   "name": "sonic",
   "description": "A modern, context-aware, and extendable CSS selector engine built on top of querySelectorAll",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "license": "Unlicense",
   "homepage": "https://github.com/ryanmorr/sonic",
   "author": {

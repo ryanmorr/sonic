@@ -1,4 +1,4 @@
-/*! sonic v0.2.1 | https://github.com/ryanmorr/sonic */
+/*! sonic v0.2.2 | https://github.com/ryanmorr/sonic */
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.sonic = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
@@ -55,7 +55,7 @@ var combinators = {
      * @return {Array}
      * @api private
      */
-    ' ': function descendantCombinator(context, token, results) {
+    ' ': function _(context, token, results) {
         return results.concat(arrayFilter.call(context.querySelectorAll(token.selector), function (el) {
             return filter(el, token.filters);
         }));
@@ -73,7 +73,7 @@ var combinators = {
      * @return {Array}
      * @api private
      */
-    '>': function childCombinator(context, token, results) {
+    '>': function _(context, token, results) {
         return results.concat(arrayFilter.call(context.querySelectorAll(token.selector), function (el) {
             return el.parentNode === context && filter(el, token.filters);
         }));
@@ -91,7 +91,7 @@ var combinators = {
      * @return {Array}
      * @api private
      */
-    '+': function adjacentSiblingCombinator(context, token, results) {
+    '+': function _(context, token, results) {
         var el = context.nextElementSibling;
         if (el && matches(el, token.selector) && filter(el, token.filters)) {
             results.push(el);
@@ -100,7 +100,7 @@ var combinators = {
     },
 
     /**
-     * Find all general sibling element of the
+     * Find all general sibling elements of the
      * context matching the token
      *
      * @param {Element} context
@@ -111,7 +111,7 @@ var combinators = {
      * @return {Array}
      * @api private
      */
-    '~': function generalSiblingCombinator(context, token, results) {
+    '~': function _(context, token, results) {
         var el = context.nextElementSibling;
         while (el) {
             if (matches(el, token.selector) && filter(el, token.filters)) {
@@ -129,8 +129,9 @@ var combinators = {
 var pseudos = exports.pseudos = Object.create(null);
 
 /**
- * Run all the custom filters against an
- * element to determine if it is a match
+ * Test an element against the custom
+ * pseudo-classes (if any) to determine if it
+ * is a match
  *
  * @param {Element} el
  * @param {Array} filters
@@ -201,7 +202,7 @@ function matches(el, selector) {
  * selector string
  *
  * @param {String} selector
- * @param {Element|String} root
+ * @param {Element|String} root (optional)
  * @return {Element|Null}
  * @api public
  */
@@ -214,7 +215,7 @@ function find(selector, root) {
  * CSS selector string
  *
  * @param {String} selector
- * @param {Element|String} root
+ * @param {Element|String} root (optional)
  * @return {Array}
  * @api public
  */
