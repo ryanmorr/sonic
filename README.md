@@ -13,34 +13,36 @@
 Find a single element:
 
 ``` javascript
-sonic.find('#container');
+// Returns the matching element or null if no match is found
+const el = sonic.find('#container');
 ```
 
 Query for multiple elements:
 
 ``` javascript
-sonic.query('.items');
+// Returns an array of all matching elements
+const elements = sonic.query('.items');
 ```
 
 Check if an element matches a selector string:
 
 ``` javascript
-sonic.matches(element, 'div.class[attr=value]');
+const isMatch = sonic.matches(element, 'div.class[attr=value]');
 ```
 
 Provide an element or selector string as an optional second argument as the root of the query:
 
 ``` javascript
-sonic.find('[attr]', element);
-sonic.query(':first-child', '#header');
+const el = sonic.find('[attr]', element);
+const elements = sonic.query(':first-child', '#header');
 ```
 
 Use leading combinators:
 
 ``` javascript
-sonic.query('> div');
-sonic.query('+ .block');
-sonic.query('~ :checked');
+const divs = sonic.query('> div');
+const blocks = sonic.query('+ .block');
+const checked = sonic.query('~ :checked');
 ```
 
 ## Extendable
@@ -56,8 +58,8 @@ sonic.pseudos.bar = (el, value) => {
     return el.hasAttribute(value);
 };
 
-sonic.query(':foo');
-sonic.query(':bar(class)');
+const el = sonic.find(':foo');
+const elements = sonic.query(':bar(class)');
 ```
 
 ## Context-Aware
@@ -74,15 +76,15 @@ Sonic addresses the long-standing flaw in `querySelector` and `querySelectorAll`
 ```
 
 ``` javascript
-// expected <em>Level 2</em>, but returns <em>Level 1</em>, doh!
+// Expected <em>Level 2</em>, but returns <em>Level 1</em>, doh!
 document.querySelector('#container').querySelector('section em');
 ```
 
 Apparently, this behavior is purported to be correct given how long it has endured. Sonic, on the other hand, abides by the principle of least surprise and gives you exactly what you expect.
 
 ``` javascript
-// returns <em>Level 2</em> as expected, hooray!
-sonic.query('section em', '#container');
+// Returns <em>Level 2</em> as expected, hooray!
+const elements = sonic.query('section em', '#container');
 ```
 
 ## Installation
