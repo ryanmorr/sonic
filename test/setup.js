@@ -1,3 +1,5 @@
+import { matches, find, query, pseudos } from '../src/sonic';
+
 const html = `
     <section id="group-1">
         <div id="element-1" class="class1 class2 class3" attr="value" attr2="some random text" lang="en-us"></div>
@@ -53,3 +55,24 @@ export const group1 = document.querySelector('#group-1');
 export const group2 = document.querySelector('#group-2');
 export const group3 = document.querySelector('#group-3');
 export const element1 = document.querySelector('#element-1');
+
+export function checkSelectors(items) {
+    items.forEach((item) => {
+        const context = item.context || document;
+        let expected = item.expected;
+        if (!expected) {
+            expected = context.querySelectorAll(item.selector);
+        }
+        const element = find(item.selector, context);
+        const elements = query(item.selector, context);
+        checkElements(expected, element, elements, item.length);
+    });
+}
+
+function checkElements(expected, element, elements, expectedLength) {
+    expect(elements).to.have.lengthOf(expectedLength);
+    expect(element).to.equal(expected[0] || null);
+    elements.forEach((el, i) => {
+        expect(el).to.equal(expected[i]);
+    });
+}
