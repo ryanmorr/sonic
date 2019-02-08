@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 const html = `
     <section id="group-1">
         <div id="element-1" class="class1 class2 class3" attr="value" attr2="some random text" lang="en-us"></div>

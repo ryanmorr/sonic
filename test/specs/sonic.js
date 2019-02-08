@@ -1,8 +1,5 @@
-/* eslint-disable max-len, no-unused-expressions */
-
-import { expect } from 'chai';
-import { body, group1, group2, group3, element1 } from './html';
-import sonic, { matches, find, query, pseudos } from '../src/sonic';
+import { body, group1, group2, group3, element1 } from '../setup';
+import sonic, { matches, find, query, pseudos } from '../../src/sonic';
 
 describe('sonic', () => {
     it('should support importing of individual methods/properties (matches, find, query, pseudos)', () => {
