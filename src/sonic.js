@@ -232,9 +232,3 @@ export function query(selector, root = doc) {
     }
     return results.sort((a, b) => 3 - (a.compareDocumentPosition(b) & 6));
 }
-
-/**
- * Declare and export `sonic` namespace
- */
-const sonic = {matches, find, query, pseudos};
-export default sonic;
