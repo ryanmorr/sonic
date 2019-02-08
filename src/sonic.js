@@ -18,10 +18,7 @@ const groupRe = /\s*,\s*/;
  */
 const matchesFn = [
     'matches',
-    'matchesSelector',
     'webkitMatchesSelector',
-    'mozMatchesSelector',
-    'oMatchesSelector',
     'msMatchesSelector'
 ].reduce((fn, name) => {
     if (fn) {
