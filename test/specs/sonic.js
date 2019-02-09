@@ -3,18 +3,14 @@ import { find, query } from '../../src/sonic';
 
 describe('sonic', () => {
     it('query should return an array', () => {
-        append('<div></div>');
-
-        expect(query('div')).to.be.an('array');
+        expect(query('body')).to.be.an('array');
     });
 
     it('find should return an element', () => {
-        append('<div></div>');
+        const body = find('body');
 
-        const div = find('div');
-
-        expect(div.nodeType).to.equal(1);
-        expect(div.nodeName).to.equal('DIV');
+        expect(body.nodeType).to.equal(1);
+        expect(body.nodeName).to.equal('BODY');
     });
 
     it('find should return null if no element is found', () => {
@@ -22,13 +18,7 @@ describe('sonic', () => {
     });
 
     it('find should return the first element of query', () => {
-        const expected = append('<div></div><div class="foo"></div><div></div>', '.foo');
-
-        const element = find('.foo');
-        const elements = query('.foo');
-
-        expect(element).to.equal(elements[0]);
-        expect(element).to.equal(expected[0]);
+        expect(find('body')).to.equal(query('body')[0]);
     });
 
     it('should support a contextual element as an optional second argument', () => {
