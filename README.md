@@ -2,47 +2,59 @@
 
 [![Version Badge][version-image]][project-url]
 [![Build Status][build-image]][build-url]
-[![Dependencies][dependencies-image]][project-url]
 [![License][license-image]][license-url]
-[![File Size][file-size-image]][project-url]
 
 > A modern, context-aware, and extendable CSS selector engine built on top of `querySelectorAll`.
+
+## Install
+
+Download the [development](http://github.com/ryanmorr/sonic/raw/master/dist/sonic.js) or [minified](http://github.com/ryanmorr/sonic/raw/master/dist/sonic.min.js) version, or install via NPM:
+
+``` sh
+npm install @ryanmorr/sonic
+```
 
 ## Usage
 
 Find a single element:
 
 ``` javascript
+import { find } from '@ryanmorr/sonic';
+
 // Returns the matching element or null if no match is found
-const el = sonic.find('#container');
+const el = find('#container');
 ```
 
 Query for multiple elements:
 
 ``` javascript
+import { query } from '@ryanmorr/sonic';
+
 // Returns an array of all matching elements
-const elements = sonic.query('.items');
+const elements = query('.items');
 ```
 
 Check if an element matches a selector string:
 
 ``` javascript
-const isMatch = sonic.matches(element, 'div.class[attr=value]');
+import { is } from '@ryanmorr/sonic';
+
+const isMatch = is(element, 'div.class[attr=value]');
 ```
 
 Provide an element or selector string as an optional second argument as the root of the query:
 
 ``` javascript
-const el = sonic.find('[attr]', element);
-const elements = sonic.query(':first-child', '#header');
+const el = find('[attr]', element);
+const elements = query(':first-child', '#header');
 ```
 
 Use leading combinators:
 
 ``` javascript
-const divs = sonic.query('> div');
-const blocks = sonic.query('+ .block');
-const checked = sonic.query('~ :checked');
+const divs = query('> div');
+const blocks = query('+ .block');
+const checked = query('~ :checked');
 ```
 
 ## Extendable
@@ -50,16 +62,18 @@ const checked = sonic.query('~ :checked');
 Create custom pseudo-class selectors (must return a boolean):
 
 ``` javascript
-sonic.pseudos.foo = (el) => {
+import { find, query, pseudos } from '@ryanmorr/sonic';
+
+pseudos.foo = (el) => {
     return el.hasAttribute('foo');
 };
 
-sonic.pseudos.bar = (el, value) => {
+pseudos.bar = (el, value) => {
     return el.hasAttribute(value);
 };
 
-const el = sonic.find(':foo');
-const elements = sonic.query(':bar(class)');
+const el = find(':foo');
+const elements = query(':bar(class)');
 ```
 
 ## Context-Aware
@@ -84,27 +98,7 @@ Apparently, this behavior is purported to be correct given how long it has endur
 
 ``` javascript
 // Returns <em>Level 2</em> as expected, hooray!
-const elements = sonic.query('section em', '#container');
-```
-
-## Installation
-
-Sonic is [CommonJS](http://www.commonjs.org/) and [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) compatible with no dependencies. You can download the [development](http://github.com/ryanmorr/sonic/raw/master/dist/sonic.js) or [minified](http://github.com/ryanmorr/sonic/raw/master/dist/sonic.min.js) version, or install it in one of the following ways:
-
-``` sh
-npm install ryanmorr/sonic
-
-bower install ryanmorr/sonic
-```
-
-## Tests
-
-Run unit tests by issuing the following commands:
-
-``` sh
-npm install
-npm install -g gulp
-gulp test
+const elements = query('section em', '#container');
 ```
 
 ## License
@@ -115,7 +109,5 @@ This project is dedicated to the public domain as described by the [Unlicense](h
 [version-image]: https://badge.fury.io/gh/ryanmorr%2Fsonic.svg
 [build-url]: https://travis-ci.org/ryanmorr/sonic
 [build-image]: https://travis-ci.org/ryanmorr/sonic.svg
-[dependencies-image]: https://david-dm.org/ryanmorr/sonic.svg
 [license-image]: https://img.shields.io/badge/license-Unlicense-blue.svg
 [license-url]: UNLICENSE
-[file-size-image]: https://badge-size.herokuapp.com/ryanmorr/sonic/master/dist/sonic.min.js.svg?color=blue&label=file%20size
