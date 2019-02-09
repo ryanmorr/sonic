@@ -14,12 +14,10 @@ describe('sonic/pseudos', () => {
         `;
 
         const expected = append(html, '#foo i:first-child');
-        const root = document.querySelector('#foo');
 
-        const elements = query(':first-child', root);
+        const elements = query(':first-child', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support :last-child', () => {
@@ -34,12 +32,10 @@ describe('sonic/pseudos', () => {
         `;
 
         const expected = append(html, '#foo i:last-child');
-        const root = document.querySelector('#foo');
 
-        const elements = query(':last-child', root);
+        const elements = query(':last-child', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support :checked', () => {
@@ -52,12 +48,10 @@ describe('sonic/pseudos', () => {
         `;
 
         const expected = append(html, '#foo input:checked');
-        const root = document.querySelector('#foo');
 
-        const elements = query(':checked', root);
+        const elements = query(':checked', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support :disabled', () => {
@@ -68,12 +62,10 @@ describe('sonic/pseudos', () => {
         `;
 
         const expected = append(html, '#foo input');
-        const root = document.querySelector('#foo');
 
-        const elements = query(':disabled', root);
+        const elements = query(':disabled', '#foo');
 
-        expect(elements.length).to.equal(1);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support :enabled', () => {
@@ -86,12 +78,10 @@ describe('sonic/pseudos', () => {
         `;
 
         const expected = append(html, '#foo input:enabled');
-        const root = document.querySelector('#foo');
 
-        const elements = query(':enabled', root);
+        const elements = query(':enabled', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support :not()', () => {
@@ -106,12 +96,10 @@ describe('sonic/pseudos', () => {
         `;
 
         const expected = append(html, '#foo span');
-        const root = document.querySelector('#foo');
 
-        const elements = query(':not(div)', root);
+        const elements = query(':not(div)', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support custom pseudo-class selectors', () => {
@@ -124,14 +112,12 @@ describe('sonic/pseudos', () => {
         `;
 
         const expected = append(html, '#foo [foo]');
-        const root = document.querySelector('#foo');
 
         pseudos.foo = (el) => el.hasAttribute('foo');
 
-        const elements = query(':foo', root);
+        const elements = query(':foo', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support custom pseudo-class selectors with values', () => {
@@ -145,13 +131,11 @@ describe('sonic/pseudos', () => {
         `;
 
         const expected = append(html, '#foo [bar]');
-        const root = document.querySelector('#foo');
 
         pseudos.foo = (el, name) => el.hasAttribute(name);
 
-        const elements = query(':foo(bar)', root);
+        const elements = query(':foo(bar)', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 });

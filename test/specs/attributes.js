@@ -14,12 +14,10 @@ describe('sonic/attributes', () => {
         `;
 
         const expected = append(html, '#foo div[foo]');
-        const root = document.querySelector('#foo');
 
-        const elements = query('[foo]', root);
+        const elements = query('[foo]', '#foo');
 
-        expect(elements.length).to.equal(3);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support [attr=value]', () => {
@@ -34,13 +32,11 @@ describe('sonic/attributes', () => {
         `;
 
         const expected = append(html, '#foo div[foo=bar]');
-        const root = document.querySelector('#foo');
 
         ['[foo=bar]', '[foo="bar"]'].forEach((selector) => {
-            const elements = query(selector, root);
+            const elements = query(selector, '#foo');
 
-            expect(elements.length).to.equal(3);
-            elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+            expect(elements).to.deep.equal(Array.from(expected));
         });
     });
 
@@ -55,12 +51,10 @@ describe('sonic/attributes', () => {
         `;
 
         const expected = append(html, '#foo [foo~="random"]');
-        const root = document.querySelector('#foo');
 
-        const elements = query('[foo~="random"]', root);
+        const elements = query('[foo~="random"]', '#foo');
 
-        expect(elements.length).to.equal(3);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support [attr|=value]', () => {
@@ -74,12 +68,10 @@ describe('sonic/attributes', () => {
         `;
 
         const expected = append(html, '#foo [lang|="en"]');
-        const root = document.querySelector('#foo');
 
-        const elements = query('[lang|="en"]', root);
+        const elements = query('[lang|="en"]', '#foo');
 
-        expect(elements.length).to.equal(3);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support [attr^=value]', () => {
@@ -93,12 +85,10 @@ describe('sonic/attributes', () => {
         `;
 
         const expected = append(html, '#foo [foo^="ba"]');
-        const root = document.querySelector('#foo');
 
-        const elements = query('[foo^="ba"]', root);
+        const elements = query('[foo^="ba"]', '#foo');
 
-        expect(elements.length).to.equal(3);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support [attr$=value]', () => {
@@ -111,12 +101,10 @@ describe('sonic/attributes', () => {
         `;
 
         const expected = append(html, '#foo [foo$="bar"]');
-        const root = document.querySelector('#foo');
 
-        const elements = query('[foo$="bar"]', root);
+        const elements = query('[foo$="bar"]', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support [attr*=value]', () => {
@@ -129,11 +117,9 @@ describe('sonic/attributes', () => {
         `;
 
         const expected = append(html, '#foo [foo*="rand"]');
-        const root = document.querySelector('#foo');
 
-        const elements = query('[foo*="rand"]', root);
+        const elements = query('[foo*="rand"]', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 });

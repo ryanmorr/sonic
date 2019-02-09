@@ -16,12 +16,10 @@ describe('sonic/combinators', () => {
         `;
 
         const expected = append(html, '#foo section div');
-        const root = document.querySelector('#foo');
 
-        const elements = query('section div', root);
+        const elements = query('section div', '#foo');
 
-        expect(elements.length).to.equal(3);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support child combinator', () => {
@@ -38,12 +36,10 @@ describe('sonic/combinators', () => {
         `;
 
         const expected = append(html, '#foo section > div');
-        const root = document.querySelector('#foo');
 
-        const elements = query('section > div', root);
+        const elements = query('section > div', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support leading child combinator', () => {
@@ -61,12 +57,10 @@ describe('sonic/combinators', () => {
         `;
 
         const expected = append(html, '#foo div.foo');
-        const root = document.querySelector('#foo');
 
-        const elements = query('> div', root);
+        const elements = query('> div', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support adjacent sibling combinator', () => {
@@ -81,12 +75,10 @@ describe('sonic/combinators', () => {
         `;
 
         const expected = append(html, '#foo div + span');
-        const root = document.querySelector('#foo');
 
-        const elements = query('div + span', root);
+        const elements = query('div + span', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support leading adjacent sibling combinator', () => {
@@ -100,12 +92,10 @@ describe('sonic/combinators', () => {
         `;
 
         const expected = append(html, '#foo + span');
-        const root = document.querySelector('#foo');
 
-        const elements = query('+ span', root);
+        const elements = query('+ span', '#foo');
 
-        expect(elements.length).to.equal(1);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support general sibling combinator', () => {
@@ -120,12 +110,10 @@ describe('sonic/combinators', () => {
         `;
 
         const expected = append(html, '#foo div ~ span');
-        const root = document.querySelector('#foo');
 
-        const elements = query('div ~ span', root);
+        const elements = query('div ~ span', '#foo');
 
-        expect(elements.length).to.equal(3);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support leading general sibling combinator', () => {
@@ -139,11 +127,9 @@ describe('sonic/combinators', () => {
         `;
 
         const expected = append(html, '#foo ~ span');
-        const root = document.querySelector('#foo');
 
-        const elements = query('~ span', root);
+        const elements = query('~ span', '#foo');
 
-        expect(elements.length).to.equal(2);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 });

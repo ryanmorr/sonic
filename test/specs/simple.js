@@ -14,12 +14,10 @@ describe('sonic/simple', () => {
         `;
 
         const expected = append(html, '#foo i');
-        const root = document.querySelector('#foo');
 
-        const elements = query('*', root);
+        const elements = query('*', '#foo');
 
-        expect(elements.length).to.equal(5);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support tag selectors', () => {
@@ -33,8 +31,7 @@ describe('sonic/simple', () => {
 
         const elements = query('button');
 
-        expect(elements.length).to.equal(3);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support id selectors', () => {
@@ -44,8 +41,7 @@ describe('sonic/simple', () => {
 
         const elements = query('#foo');
 
-        expect(elements.length).to.equal(1);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support class selectors', () => {
@@ -60,8 +56,7 @@ describe('sonic/simple', () => {
 
         const elements = query('.foo');
 
-        expect(elements.length).to.equal(3);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support multiple class selectors', () => {
@@ -77,8 +72,7 @@ describe('sonic/simple', () => {
 
         const elements = query('.foo.bar');
 
-        expect(elements.length).to.equal(3);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support multiple selectors', () => {
@@ -95,7 +89,6 @@ describe('sonic/simple', () => {
 
         const elements = query('div, em, i');
 
-        expect(elements.length).to.equal(6);
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 });

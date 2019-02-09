@@ -35,12 +35,7 @@ describe('sonic', () => {
 
         const elements = query('span', root);
 
-        expect(elements.length).to.equal(expected.length);
-        elements.forEach((el, i) => {
-            expect(el.nodeName).to.equal('SPAN');
-            expect(root.contains(el)).to.equal(true);
-            expect(el).to.equal(expected[i]);
-        });
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should support a selector string for a contextual element as an optional second argument', () => {
@@ -53,16 +48,10 @@ describe('sonic', () => {
         `;
 
         const expected = append(html, '#foo em');
-        const root = document.querySelector('#foo');
 
         const elements = query('em', '#foo');
 
-        expect(elements.length).to.equal(expected.length);
-        elements.forEach((el, i) => {
-            expect(el.nodeName).to.equal('EM');
-            expect(root.contains(el)).to.equal(true);
-            expect(el).to.equal(expected[i]);
-        });
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should be context-aware', () => {
@@ -76,9 +65,8 @@ describe('sonic', () => {
         `;
 
         const expected = append(html, '#foo section h1');
-        const root = document.querySelector('#foo');
 
-        const element = find('section h1', root);
+        const element = find('section h1', '#foo');
 
         expect(element).to.equal(expected[0]);
     });
@@ -102,7 +90,7 @@ describe('sonic', () => {
 
         const expected = elements.slice().sort((a, b) => 3 - (a.compareDocumentPosition(b) & 6));
 
-        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        expect(elements).to.deep.equal(Array.from(expected));
     });
 
     it('should accept selector strings with leading/trailing spaces', () => {
