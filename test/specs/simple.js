@@ -1,42 +1,101 @@
-import { checkSelectors, body, group1, group2, group3, element1 } from '../setup';
-import { matches, find, query, pseudos } from '../../src/sonic';
+import { append } from '../setup';
+import { query } from '../../src/sonic';
 
 describe('sonic/simple', () => {
     it('should support the universal selector (*)', () => {
-        checkSelectors([
-            {selector: '*', context: body, length: 35},
-            {selector: '*', context: group1, length: 14}
-        ]);
+        const html = `
+            <div id="foo">
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+                <i></i>
+            </div>
+        `;
+
+        const expected = append(html, '#foo i');
+        const root = document.querySelector('#foo');
+
+        const elements = query('*', root);
+
+        expect(elements.length).to.equal(5);
+        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
     });
 
     it('should support tag selectors', () => {
-        checkSelectors([
-            {selector: 'section', length: 4},
-            {selector: 'div', context: group1, length: 6}
-        ]);
+        const html = `
+            <button></button>
+            <button></button>
+            <button></button>
+        `;
+
+        const expected = append(html, 'button');
+
+        const elements = query('button');
+
+        expect(elements.length).to.equal(3);
+        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
     });
 
     it('should support id selectors', () => {
-        checkSelectors([
-            {selector: '#group-1', length: 1},
-            {selector: '#element-1', length: 1},
-            {selector: '#group-1', context: group1, length: 0}
-        ]);
+        const html = '<div id="foo"></div>';
+
+        const expected = append(html, '#foo');
+
+        const elements = query('#foo');
+
+        expect(elements.length).to.equal(1);
+        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
     });
 
     it('should support class selectors', () => {
-        checkSelectors([
-            {selector: '.class1', length: 3},
-            {selector: '.class1.class2', length: 3},
-            {selector: '.class1.class2.class3', length: 1},
-            {selector: '.class1.class2', context: group1, length: 2}
-        ]);
+        const html = `
+            <div class="foo"></div>
+            <div class="foo"></div>
+            <div></div>
+            <div class="foo"></div>
+        `;
+
+        const expected = append(html, '.foo');
+
+        const elements = query('.foo');
+
+        expect(elements.length).to.equal(3);
+        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+    });
+
+    it('should support multiple class selectors', () => {
+        const html = `
+            <div class="foo bar"></div>
+            <div class="foo"></div>
+            <div class="foo bar"></div>
+            <div class="bar"></div>
+            <div class="bar foo"></div>
+        `;
+
+        const expected = append(html, '.foo.bar');
+
+        const elements = query('.foo.bar');
+
+        expect(elements.length).to.equal(3);
+        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
     });
 
     it('should support multiple selectors', () => {
-        checkSelectors([
-            {selector: 'div, span', length: 16},
-            {selector: 'span, em, i', context: group1, length: 8}
-        ]);
+        const html = `
+            <div></div>
+            <div></div>
+            <em></em>
+            <i></i>
+            <i></i>
+            <i></i>
+        `;
+
+        const expected = append(html, 'div, em, i');
+
+        const elements = query('div, em, i');
+
+        expect(elements.length).to.equal(6);
+        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
     });
 });

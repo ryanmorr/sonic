@@ -1,58 +1,139 @@
-import { checkSelectors, body, group1, group2, group3, element1 } from '../setup';
-import { matches, find, query, pseudos } from '../../src/sonic';
+import { append } from '../setup';
+import { query } from '../../src/sonic';
 
 describe('sonic/attributes', () => {
     it('should support [attr]', () => {
-        checkSelectors([
-            {selector: '[foo]', length: 9},
-            {selector: '[attr][attr2]', length: 2},
-            {selector: '[attr][attr2][lang]', length: 1},
-            {selector: '[attr2]', context: group2, length: 2}
-        ]);
+        const html = `
+            <div id="foo">
+                <div foo></div>
+                <div></div>
+                <div></div>
+                <div foo></div>
+                <div foo></div>
+            </div>
+        `;
+
+        const expected = append(html, '#foo div[foo]');
+        const root = document.querySelector('#foo');
+
+        const elements = query('[foo]', root);
+
+        expect(elements.length).to.equal(3);
+        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
     });
 
     it('should support [attr=value]', () => {
-        checkSelectors([
-            {selector: '[attr=value]', length: 2},
-            {selector: '[attr="value"]', length: 2},
-            {selector: "[attr='value']", length: 2},
-            {selector: '[attr=\'value\']', length: 2},
-            {selector: '[attr=value]', context: group2, length: 1}
-        ]);
+        const html = `
+            <div id="foo">
+                <div foo="bar"></div>
+                <div foo="bar"></div>
+                <div foo></div>
+                <div foo="baz"></div>
+                <div foo="bar"></div>
+            </div>
+        `;
+
+        const expected = append(html, '#foo div[foo=bar]');
+        const root = document.querySelector('#foo');
+
+        ['[foo=bar]', '[foo="bar"]'].forEach((selector) => {
+            const elements = query(selector, root);
+
+            expect(elements.length).to.equal(3);
+            elements.forEach((el, i) => expect(el).to.equal(expected[i]));
+        });
     });
 
     it('should support [attr~=value]', () => {
-        checkSelectors([
-            {selector: '[attr2~="random"]', length: 3},
-            {selector: '[attr2~="random"]', context: group2, length: 2}
-        ]);
+        const html = `
+            <div id="foo">
+                <div foo="some random text"></div>
+                <div foo="random"></div>
+                <div foo="some random text"></div>
+                <div foo></div>
+            </div>
+        `;
+
+        const expected = append(html, '#foo [foo~="random"]');
+        const root = document.querySelector('#foo');
+
+        const elements = query('[foo~="random"]', root);
+
+        expect(elements.length).to.equal(3);
+        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
     });
 
     it('should support [attr|=value]', () => {
-        checkSelectors([
-            {selector: '[lang|="en"]', length: 2},
-            {selector: '[lang|="en"]', context: group2, length: 0}
-        ]);
+        const html = `
+            <div id="foo">
+                <div lang="en-us"></div>
+                <div lang="en-us"></div>
+                <div></div>
+                <span lang="en-us"></span>
+            </div>
+        `;
+
+        const expected = append(html, '#foo [lang|="en"]');
+        const root = document.querySelector('#foo');
+
+        const elements = query('[lang|="en"]', root);
+
+        expect(elements.length).to.equal(3);
+        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
     });
 
     it('should support [attr^=value]', () => {
-        checkSelectors([
-            {selector: '[attr2^="some"]', length: 3},
-            {selector: '[attr2^="some"]', context: group2, length: 2}
-        ]);
+        const html = `
+            <div id="foo">
+                <div foo="bar"></div>
+                <div foo="baz"></div>
+                <div foo></div>
+                <div foo="bar"></div>
+            </div>
+        `;
+
+        const expected = append(html, '#foo [foo^="ba"]');
+        const root = document.querySelector('#foo');
+
+        const elements = query('[foo^="ba"]', root);
+
+        expect(elements.length).to.equal(3);
+        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
     });
 
     it('should support [attr$=value]', () => {
-        checkSelectors([
-            {selector: '[attr2$="text"]', length: 3},
-            {selector: '[attr2$="text"]', context: group2, length: 2}
-        ]);
+        const html = `
+            <div id="foo">
+                <div foo="foo bar"></div>
+                <div foo="bar"></div>
+                <div foo></div>
+            </div>
+        `;
+
+        const expected = append(html, '#foo [foo$="bar"]');
+        const root = document.querySelector('#foo');
+
+        const elements = query('[foo$="bar"]', root);
+
+        expect(elements.length).to.equal(2);
+        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
     });
 
     it('should support [attr*=value]', () => {
-        checkSelectors([
-            {selector: '[attr2*="rand"]', length: 3},
-            {selector: '[attr2*="rand"]', context: group2, length: 2}
-        ]);
+        const html = `
+            <div id="foo">
+                <div foo="random"></div>
+                <div foo></div>
+                <div foo="random"></div>
+            </div>
+        `;
+
+        const expected = append(html, '#foo [foo*="rand"]');
+        const root = document.querySelector('#foo');
+
+        const elements = query('[foo*="rand"]', root);
+
+        expect(elements.length).to.equal(2);
+        elements.forEach((el, i) => expect(el).to.equal(expected[i]));
     });
 });
