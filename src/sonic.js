@@ -120,6 +120,18 @@ const combinators = {
 export const pseudos = Object.create(null);
 
 /**
+ * Does an element match a CSS selector string
+ *
+ * @param {Element} el
+ * @param {String} selector
+ * @return {Boolean}
+ * @api private
+ */
+function matches(el, selector) {
+    return el[matchesFn](selector);
+}
+
+/**
  * Test an element against the custom
  * pseudo-classes (if any) to determine if it
  * is a match
@@ -141,6 +153,26 @@ function filter(el, filters) {
 }
 
 /**
+ * Convert a simple selector into a token
+ *
+ * @param {String} selector
+ * @return {Object}
+ * @api private
+ */
+function getToken(selector) {
+    const filters = [];
+    selector = selector.replace(pseudoRe, (all, name, param) => {
+        if (name in pseudos) {
+            filters.push({name, param});
+            return '';
+        }
+        return all;
+    });
+    selector = selector === '' ? '*' : selector;
+    return {selector, filters};
+}
+
+/**
  * Convert a selector string into an
  * array of tokens
  *
@@ -155,16 +187,7 @@ function tokenize(selectorString) {
                 tokens.push(selector);
                 return tokens;
             }
-            const filters = [];
-            selector = selector.replace(pseudoRe, (all, name, param) => {
-                if (name in pseudos) {
-                    filters.push({name, param});
-                    return '';
-                }
-                return all;
-            });
-            selector = selector === '' ? '*' : selector;
-            tokens.push({selector, filters});
+            tokens.push(getToken(selector));
         }
         return tokens;
     }, []);
@@ -172,14 +195,16 @@ function tokenize(selectorString) {
 
 /**
  * Does an element match a CSS selector string
+ * including custom pseudo-classes
  *
  * @param {Element} el
  * @param {String} selector
  * @return {Boolean}
  * @api public
  */
-export function matches(el, selector) {
-    return el[matchesFn](selector);
+export function is(el, selector) {
+    const token = getToken(selector);
+    return matches(el, token.selector) && filter(el, token.filters);
 }
 
 /**
