@@ -18,13 +18,18 @@ function parseHTML(html) {
     return frag;
 }
 
-export function append(html, expected) {
+export function append(html) {
     const frag = parseHTML(html);
     for (const child of frag.childNodes) {
         elements.push(child);
     }
     document.body.appendChild(frag);
-    if (expected) {
-        return document.querySelectorAll(expected);
+}
+
+export function testResults(results, expected) {
+    if (typeof expected === 'string') {
+        expected = Array.from(document.querySelectorAll(expected));
     }
+    expect(results.length).to.be.above(0);
+    expect(results).to.deep.equal(expected);
 }

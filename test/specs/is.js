@@ -3,13 +3,13 @@ import { is, pseudos } from '../../src/sonic';
 
 describe('sonic/is', () => {
     it('should return true for an element with a matching selector string', () => {
-        const html = `
+        append(`
             <section>
                 <div id="foo" class="class1 class2 class3" attr="value" attr2="some random text" lang="en-us"></div>
             </section>
-        `;
+        `);
 
-        const element = append(html, '#foo')[0];
+        const element = document.querySelector('#foo');
 
         const selectors = [
             'div',
@@ -31,19 +31,19 @@ describe('sonic/is', () => {
             'div#foo.class1.class2.class3[attr=value][attr2="some random text"][lang="en-us"]'
         ];
 
-        selectors.forEach((selector) => expect(is(element, selector)).to.equal(true, selector));
+        selectors.forEach((selector) => expect(is(element, selector)).to.equal(true));
     });
 
     it('should return false for an element with a non-matching selector string', () => {
-        const html = `
+        append(`
             <section>
             <div></div>
                 <div id="foo" class="class1 class2 class3" attr="value" attr2="some random text" lang="en-us"></div>
                 <div></div>
             </section>
-        `;
+        `);
 
-        const element = append(html, '#foo')[0];
+        const element = document.querySelector('#foo');
 
         const selectors = [
             'span',
@@ -59,7 +59,11 @@ describe('sonic/is', () => {
     });
 
     it('should match custom pseudo-classes', () => {
-        const element = append('<div id="foo" foo="bar" lang="en-us"></div>', '#foo')[0];
+        append(`
+            <div id="foo" foo="bar" lang="en-us"></div>
+        `);
+
+        const element = document.querySelector('#foo');
 
         expect(() => is(element, ':foo')).to.throw();
         expect(() => is(element, ':bar(lang)')).to.throw();

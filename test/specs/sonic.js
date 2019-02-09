@@ -1,4 +1,4 @@
-import { append } from '../setup';
+import { append, testResults } from '../setup';
 import { find, query } from '../../src/sonic';
 
 describe('sonic', () => {
@@ -22,57 +22,60 @@ describe('sonic', () => {
     });
 
     it('should support a contextual element as an optional second argument', () => {
-        const html = `
+        append(`
             <div id="foo">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
-        `;
+        `);
 
-        const expected = append(html, '#foo span');
         const root = document.querySelector('#foo');
 
         const elements = query('span', root);
 
-        expect(elements).to.deep.equal(Array.from(expected));
+        testResults(elements, '#foo span');
     });
 
     it('should support a selector string for a contextual element as an optional second argument', () => {
-        const html = `
+        append(`
             <div id="foo">
                 <em></em>
                 <em></em>
                 <em></em>
             </div>
-        `;
-
-        const expected = append(html, '#foo em');
+        `);
 
         const elements = query('em', '#foo');
 
-        expect(elements).to.deep.equal(Array.from(expected));
+        testResults(elements, '#foo em');
     });
 
     it('should be context-aware', () => {
-        const html = `
+        append(`
             <section id="foo">
                 <h1>Top Heading</h1>
                 <section>
                     <h1>Sub Heading</h1>
                 </section>
             </section>
-        `;
+        `);
 
-        const expected = append(html, '#foo section h1');
+        const expected = document.querySelector('#foo section h1');
 
         const element = find('section h1', '#foo');
 
-        expect(element).to.equal(expected[0]);
+        expect(element).to.equal(expected);
     });
 
     it('should not return duplicate elements', () => {
-        append('<div></div><div></div>');
+        append(`
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        `);
 
         const elements = query('div, div');
 
@@ -84,17 +87,25 @@ describe('sonic', () => {
     });
 
     it('should return elements in the order they appear in the document', () => {
-        append('<div></div><div></div>');
+        append(`
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        `);
 
         const elements = query('div');
 
         const expected = elements.slice().sort((a, b) => 3 - (a.compareDocumentPosition(b) & 6));
 
-        expect(elements).to.deep.equal(Array.from(expected));
+        testResults(elements, expected);
     });
 
     it('should accept selector strings with leading/trailing spaces', () => {
-        const expected = append('<div id="foo"></div>', '#foo')[0];
+        append('<div id="foo"></div>');
+
+        const expected = document.querySelector('#foo');
 
         [' #foo', '#foo ', ' #foo ', '  #foo   '].forEach((selector) => {
             expect(find(selector)).to.equal(expected);
