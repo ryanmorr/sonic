@@ -56,14 +56,7 @@ function matches(el, selector) {
 }
 
 function filter(el, filters) {
-    let i = filters.length;
-    while (i--) {
-        const filter = filters[i];
-        if (!pseudos[filter.name](el, filter.value)) {
-            return false;
-        }
-    }
-    return true;
+    return filters.every(({name, value}) => pseudos[name](el, value));
 }
 
 function tokenize(selector) {
@@ -125,7 +118,7 @@ export function query(selector, root = doc) {
         root = find(root);
     }
     root = [root];
-    const results = tokenize(selector).reduce((results, tokens) => {
+    return tokenize(selector).reduce((results, tokens) => {
         let context = root;
         let i = 0;
         const len = tokens.length;
@@ -143,7 +136,5 @@ export function query(selector, root = doc) {
             }
         });
         return results;
-    }, []);
-
-    return results.sort((a, b) => 3 - (a.compareDocumentPosition(b) & 6));
+    }, []).sort((a, b) => 3 - (a.compareDocumentPosition(b) & 6));
 }
