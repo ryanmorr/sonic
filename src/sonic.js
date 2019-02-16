@@ -1,21 +1,9 @@
-/**
- * Common variables
- */
+import parse from '@ryanmorr/css-selector-parser';
+
 const doc = window.document;
 const documentElement = doc.documentElement;
 const arrayFilter = [].filter;
 
-/**
- * Parsing regular expressions
- */
-const splitRe = /\s*(>|\+(?!\d)|~(?!=)|\s)\s*/;
-const pseudoRe = /:([\w-]+)(?:\(([^)]*)\))?/g;
-const groupRe = /\s*,\s*/;
-
-/**
- * Feature test for the browser's implementation
- * of `matches`
- */
 const matchesFn = [
     'matches',
     'webkitMatchesSelector',
@@ -27,61 +15,20 @@ const matchesFn = [
     return name in documentElement ? name : fn;
 }, null);
 
-/**
- * Map CSS selector combinators to a function
- * capable of finding the relative elements and
- * filtering them based on the provided token
- */
 const combinators = {
 
-    /**
-     * Find all descendant elements of the
-     * context matching the token
-     *
-     * @param {Element} context
-     * @param {Object} token
-     * @param {String} token.selector
-     * @param {Array} token.filters
-     * @param {Array} results
-     * @return {Array}
-     * @api private
-     */
     ' ': (context, token, results) => {
         return results.concat(arrayFilter.call(context.querySelectorAll(token.selector), (el) => {
             return filter(el, token.filters);
         }));
     },
 
-    /**
-     * Find all child elements of the
-     * context matching the token
-     *
-     * @param {Element} context
-     * @param {Object} token
-     * @param {String} token.selector
-     * @param {Array} token.filters
-     * @param {Array} results
-     * @return {Array}
-     * @api private
-     */
     '>': (context, token, results) => {
         return results.concat(arrayFilter.call(context.querySelectorAll(token.selector), (el) => {
             return el.parentNode === context && filter(el, token.filters);
         }));
     },
 
-    /**
-     * Find all adjacent sibling elements of the
-     * context matching the token
-     *
-     * @param {Element} context
-     * @param {Object} token
-     * @param {String} token.selector
-     * @param {Array} token.filters
-     * @param {Array} results
-     * @return {Array}
-     * @api private
-     */
     '+': (context, token, results) => {
         const el = context.nextElementSibling;
         if (el && matches(el, token.selector) && filter(el, token.filters)) {
@@ -90,18 +37,6 @@ const combinators = {
         return results;
     },
 
-    /**
-     * Find all general sibling elements of the
-     * context matching the token
-     *
-     * @param {Element} context
-     * @param {Object} token
-     * @param {String} token.selector
-     * @param {Array} token.filters
-     * @param {Array} results
-     * @return {Array}
-     * @api private
-     */
     '~': (context, token, results) => {
         let el = context.nextElementSibling;
         while (el) {
@@ -114,143 +49,101 @@ const combinators = {
     }
 };
 
-/**
- * Export pseudo-class map for custom filters
- */
 export const pseudos = Object.create(null);
 
-/**
- * Does an element match a CSS selector string
- *
- * @param {Element} el
- * @param {String} selector
- * @return {Boolean}
- * @api private
- */
 function matches(el, selector) {
     return el[matchesFn](selector);
 }
 
-/**
- * Test an element against the custom
- * pseudo-classes (if any) to determine if it
- * is a match
- *
- * @param {Element} el
- * @param {Array} filters
- * @return {Boolean}
- * @api private
- */
 function filter(el, filters) {
     let i = filters.length;
     while (i--) {
         const filter = filters[i];
-        if (!pseudos[filter.name](el, filter.param)) {
+        if (!pseudos[filter.name](el, filter.value)) {
             return false;
         }
     }
     return true;
 }
 
-/**
- * Convert a simple selector into a token
- *
- * @param {String} selector
- * @return {Object}
- * @api private
- */
-function getToken(selector) {
-    const filters = [];
-    selector = selector.replace(pseudoRe, (all, name, param) => {
-        if (name in pseudos) {
-            filters.push({name, param});
-            return '';
-        }
-        return all;
-    });
-    selector = selector === '' ? '*' : selector;
-    return {selector, filters};
-}
-
-/**
- * Convert a selector string into an
- * array of tokens
- *
- * @param {String} selectorString
- * @return {Array}
- * @api private
- */
-function tokenize(selectorString) {
-    return selectorString.split(splitRe).reduce((tokens, selector) => {
-        if (selector) {
-            if (selector in combinators) {
-                tokens.push(selector);
-                return tokens;
+function tokenize(selector) {
+    return parse(selector).map((tokens) => {
+        return tokens.map((token) => {
+            if (typeof token === 'string') {
+                return token;
             }
-            tokens.push(getToken(selector));
-        }
-        return tokens;
-    }, []);
+            const selector = [];
+            const filters = [];
+            if (token.nodeName) {
+                selector.push(token.nodeName);
+            }
+            token.attributes.forEach(({name, value, operator, ignoreCase}) => {
+                if (name === 'id') {
+                    selector.push('#', value);
+                } else if (name === 'class') {
+                    selector.push('.', value);
+                } else {
+                    selector.push('[', name);
+                    if (operator !== '') {
+                        selector.push(operator, '"', value, '"');
+                        if (ignoreCase) {
+                            selector.push(' i');
+                        }
+                    }
+                    selector.push(']');
+                }
+            });
+            token.pseudos.forEach(({name, value}) => {
+                if (name in pseudos) {
+                    filters.push({name, value});
+                } else {
+                    selector.push(':', name);
+                    if (value !== '') {
+                        selector.push('(', value, ')');
+                    }
+                }
+            });
+            return {
+                filters,
+                selector: selector.length === 0 ? '*' : selector.join('')
+            };
+        });
+    });
 }
 
-/**
- * Does an element match a CSS selector string
- * including custom pseudo-classes
- *
- * @param {Element} el
- * @param {String} selector
- * @return {Boolean}
- * @api public
- */
 export function is(el, selector) {
-    const token = getToken(selector);
+    const token = tokenize(selector)[0][0];
     return matches(el, token.selector) && filter(el, token.filters);
 }
 
-/**
- * Find a single element based on a CSS
- * selector string
- *
- * @param {String} selector
- * @param {Element|String} root (optional)
- * @return {Element|Null}
- * @api public
- */
 export function find(selector, root) {
     return query(selector, root)[0] || null;
 }
 
-/**
- * Query for all elements matching a
- * CSS selector string
- *
- * @param {String} selector
- * @param {Element|String} root (optional)
- * @return {Array}
- * @api public
- */
 export function query(selector, root = doc) {
     if (typeof root === 'string') {
         root = find(root);
     }
-    const results = [];
-    const groups = selector.trim().split(groupRe);
-    while (groups.length) {
-        let context = [root];
-        const tokens = tokenize(groups.shift());
-        while (tokens.length && context.length) {
-            let token = tokens.shift(), combinator = combinators[' '];
+    root = [root];
+    const results = tokenize(selector).reduce((results, tokens) => {
+        let context = root;
+        let i = 0;
+        const len = tokens.length;
+        while (i < len) {
+            let token = tokens[i++], combinator = combinators[' '];
             if (token in combinators) {
                 combinator = combinators[token];
-                token = tokens.shift();
+                token = tokens[i++];
             }
             context = context.reduce((nodes, el) => combinator(el, token, nodes), []);
         }
         context.forEach((el) => {
-            if (results.indexOf(el) === -1) {
+            if (!results.includes(el)) {
                 results.push(el);
             }
         });
-    }
+        return results;
+    }, []);
+
     return results.sort((a, b) => 3 - (a.compareDocumentPosition(b) & 6));
 }
