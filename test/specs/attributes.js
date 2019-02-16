@@ -108,4 +108,18 @@ describe('sonic/attributes', () => {
 
         testResults(elements, '#foo [foo*="rand"]');
     });
+
+    it('should support [attr="value" i]', () => {
+        append(`
+            <div id="foo">
+                <div foo="bar"></div>
+                <div foo="BAR"></div>
+                <div foo="Bar"></div>
+            </div>
+        `);
+
+        const elements = query('[foo="bar" i]', '#foo');
+
+        testResults(elements, '#foo div');
+    });
 });
