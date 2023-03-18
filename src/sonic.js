@@ -1,4 +1,4 @@
-import parse from '@ryanmorr/css-selector-parser';
+import parselector from '@ryanmorr/parselector';
 
 const doc = window.document;
 const documentElement = doc.documentElement;
@@ -60,7 +60,7 @@ function filter(el, filters) {
 }
 
 function tokenize(selector) {
-    return parse(selector).map((tokens) => {
+    return parselector(selector).map((tokens) => {
         return tokens.map((token) => {
             if (typeof token === 'string') {
                 return token;
@@ -86,7 +86,7 @@ function tokenize(selector) {
                     selector.push(']');
                 }
             });
-            token.pseudos.forEach(({name, value}) => {
+            token.pseudoClasses.forEach(({name, value}) => {
                 if (name in pseudos) {
                     filters.push({name, value});
                 } else {

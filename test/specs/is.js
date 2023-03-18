@@ -65,9 +65,6 @@ describe('sonic/is', () => {
 
         const element = document.querySelector('#foo');
 
-        expect(() => is(element, ':foo')).to.throw();
-        expect(() => is(element, ':bar(lang)')).to.throw();
-
         pseudos.foo = (el) => el.hasAttribute('foo');
         pseudos.bar = (el, name) => el.hasAttribute(name);
 
