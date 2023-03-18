@@ -47,6 +47,6 @@
     "terser": "^5.16.3"
   },
   "dependencies": {
-    "@ryanmorr/parselector": "^1.0.0"
+    "@ryanmorr/parselector": "^1.0.1"
   }
 }
