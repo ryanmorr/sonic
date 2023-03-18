@@ -1,19 +1,7 @@
 import parselector from '@ryanmorr/parselector';
 
 const doc = window.document;
-const documentElement = doc.documentElement;
 const arrayFilter = [].filter;
-
-const matchesFn = [
-    'matches',
-    'webkitMatchesSelector',
-    'msMatchesSelector'
-].reduce((fn, name) => {
-    if (fn) {
-        return fn;
-    }
-    return name in documentElement ? name : fn;
-}, null);
 
 const combinators = {
 
@@ -31,7 +19,7 @@ const combinators = {
 
     '+': (context, token, results) => {
         const el = context.nextElementSibling;
-        if (el && matches(el, token.selector) && filter(el, token.filters)) {
+        if (el && el.matches(token.selector) && filter(el, token.filters)) {
             results.push(el);
         }
         return results;
@@ -40,7 +28,7 @@ const combinators = {
     '~': (context, token, results) => {
         let el = context.nextElementSibling;
         while (el) {
-            if (matches(el, token.selector) && filter(el, token.filters)) {
+            if (el.matches(token.selector) && filter(el, token.filters)) {
                 results.push(el);
             }
             el = el.nextElementSibling;
@@ -48,12 +36,6 @@ const combinators = {
         return results;
     }
 };
-
-export const pseudos = Object.create(null);
-
-function matches(el, selector) {
-    return el[matchesFn](selector);
-}
 
 function filter(el, filters) {
     return filters.every(({name, value}) => pseudos[name](el, value));
@@ -104,9 +86,11 @@ function tokenize(selector) {
     });
 }
 
+export const pseudos = Object.create(null);
+
 export function is(el, selector) {
     const token = tokenize(selector)[0][0];
-    return matches(el, token.selector) && filter(el, token.filters);
+    return el.matches(token.selector) && filter(el, token.filters);
 }
 
 export function find(selector, root) {
