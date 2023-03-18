@@ -7,7 +7,11 @@
   "homepage": "https://github.com/ryanmorr/sonic",
   "repository": "github:ryanmorr/sonic",
   "bugs": "https://github.com/ryanmorr/sonic/issues",
-  "keywords": [],
+  "keywords": [
+    "javascript",
+    "dom",
+    "selector"
+  ],
   "type": "module",
   "main": "dist/cjs/sonic.js",
   "module": "dist/esm/sonic.js",
