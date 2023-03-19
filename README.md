@@ -1,14 +1,14 @@
 # sonic
 
 [![Version Badge][version-image]][project-url]
-[![Build Status][build-image]][build-url]
 [![License][license-image]][license-url]
+[![Build Status][build-image]][build-url]
 
 > A modern, context-aware, and extendable CSS selector engine built on top of `querySelectorAll`.
 
 ## Install
 
-Download the [development](http://github.com/ryanmorr/sonic/raw/master/dist/sonic.js) or [minified](http://github.com/ryanmorr/sonic/raw/master/dist/sonic.min.js) version, or install via NPM:
+Download the [CJS](https://github.com/ryanmorr/sonic/raw/master/dist/cjs/sonic.js), [ESM](https://github.com/ryanmorr/sonic/raw/master/dist/esm/sonic.js), [UMD](https://github.com/ryanmorr/sonic/raw/master/dist/umd/sonic.js) versions or install via NPM:
 
 ``` sh
 npm install @ryanmorr/sonic
@@ -22,7 +22,7 @@ Find a single element:
 import { find } from '@ryanmorr/sonic';
 
 // Returns the matching element or null if no match is found
-const el = find('#container');
+const element = find('#container');
 ```
 
 Query for multiple elements:
@@ -45,7 +45,7 @@ const isMatch = is(element, 'div.class[attr=value]');
 Provide an element or selector string as an optional second argument as the root of the query:
 
 ``` javascript
-const el = find('[attr]', element);
+const element = find('[attr]', element);
 const elements = query(':first-child', '#header');
 ```
 
@@ -57,22 +57,20 @@ const blocks = query('+ .block');
 const checked = query('~ :checked');
 ```
 
-## Extendable
-
-Create custom pseudo-class selectors (must return a boolean):
+Extend by creating custom pseudo-class selectors (must return a boolean):
 
 ``` javascript
 import { find, query, pseudos } from '@ryanmorr/sonic';
 
-pseudos.foo = (el) => {
-    return el.hasAttribute('foo');
+pseudos.foo = (element) => {
+    return element.hasAttribute('foo');
 };
 
-pseudos.bar = (el, value) => {
-    return el.hasAttribute(value);
+pseudos.bar = (element, value) => {
+    return element.hasAttribute(value);
 };
 
-const el = find(':foo');
+const element = find(':foo');
 const elements = query(':bar(class)');
 ```
 
@@ -106,8 +104,8 @@ const elements = query('section em', '#container');
 This project is dedicated to the public domain as described by the [Unlicense](http://unlicense.org/).
 
 [project-url]: https://github.com/ryanmorr/sonic
-[version-image]: https://badge.fury.io/gh/ryanmorr%2Fsonic.svg
-[build-url]: https://travis-ci.org/ryanmorr/sonic
-[build-image]: https://travis-ci.org/ryanmorr/sonic.svg
-[license-image]: https://img.shields.io/badge/license-Unlicense-blue.svg
+[version-image]: https://img.shields.io/github/package-json/v/ryanmorr/sonic?color=blue&style=flat-square
+[build-url]: https://github.com/ryanmorr/sonic/actions
+[build-image]: https://img.shields.io/github/actions/workflow/status/ryanmorr/sonic/node.js.yml?style=flat-square
+[license-image]: https://img.shields.io/github/license/ryanmorr/sonic?color=blue&style=flat-square
 [license-url]: UNLICENSE
