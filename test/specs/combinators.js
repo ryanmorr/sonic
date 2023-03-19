@@ -1,7 +1,7 @@
-import { append, testResults } from '../setup';
+import { append } from '../setup';
 import { query } from '../../src/sonic';
 
-describe('sonic/combinators', () => {
+describe('combinators', () => {
     it('should support decendant combinator', () => {
         append(`
             <div id="foo">
@@ -15,9 +15,7 @@ describe('sonic/combinators', () => {
             </div>
         `);
 
-        const elements = query('section div', '#foo');
-
-        testResults(elements, '#foo section div');
+        expect(query('section div', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo section div')));
     });
 
     it('should support child combinator', () => {
@@ -33,9 +31,7 @@ describe('sonic/combinators', () => {
             </div>
         `);
 
-        const elements = query('section > div', '#foo');
-
-        testResults(elements, '#foo section > div');
+        expect(query('section > div', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo section > div')));
     });
 
     it('should support leading child combinator', () => {
@@ -52,9 +48,7 @@ describe('sonic/combinators', () => {
             </div>
         `);
 
-        const elements = query('> div', '#foo');
-
-        testResults(elements, '#foo div.foo');
+        expect(query('> div', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo div.foo')));
     });
 
     it('should support adjacent sibling combinator', () => {
@@ -68,9 +62,7 @@ describe('sonic/combinators', () => {
             </div>
         `);
 
-        const elements = query('div + span', '#foo');
-
-        testResults(elements, '#foo div + span');
+        expect(query('div + span', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo div + span')));
     });
 
     it('should support leading adjacent sibling combinator', () => {
@@ -83,9 +75,7 @@ describe('sonic/combinators', () => {
             <span></span>
         `);
 
-        const elements = query('+ span', '#foo');
-
-        testResults(elements, '#foo + span');
+        expect(query('+ span', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo + span')));
     });
 
     it('should support general sibling combinator', () => {
@@ -99,9 +89,7 @@ describe('sonic/combinators', () => {
             </div>
         `);
 
-        const elements = query('div ~ span', '#foo');
-
-        testResults(elements, '#foo div ~ span');
+        expect(query('div ~ span', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo div ~ span')));
     });
 
     it('should support leading general sibling combinator', () => {
@@ -114,8 +102,6 @@ describe('sonic/combinators', () => {
             <span></span>
         `);
 
-        const elements = query('~ span', '#foo');
-
-        testResults(elements, '#foo ~ span');
+        expect(query('~ span', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo ~ span')));
     });
 });

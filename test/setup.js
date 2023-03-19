@@ -25,11 +25,3 @@ export function append(html) {
     }
     document.body.appendChild(frag);
 }
-
-export function testResults(results, expected) {
-    if (typeof expected === 'string') {
-        expected = Array.from(document.querySelectorAll(expected));
-    }
-    expect(results.length).to.be.above(0);
-    expect(results).to.deep.equal(expected);
-}

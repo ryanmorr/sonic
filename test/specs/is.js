@@ -1,7 +1,7 @@
 import { append } from '../setup';
 import { is, pseudos } from '../../src/sonic';
 
-describe('sonic/is', () => {
+describe('is', () => {
     it('should return true for an element with a matching selector string', () => {
         append(`
             <section>

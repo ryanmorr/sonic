@@ -1,24 +1,30 @@
-import { append, testResults } from '../setup';
+import { append } from '../setup';
 import { find, query } from '../../src/sonic';
 
 describe('sonic', () => {
-    it('query should return an array', () => {
+    it('should return an array', () => {
         expect(query('body')).to.be.an('array');
     });
 
-    it('find should return an element', () => {
+    it('should return an element', () => {
         const body = find('body');
 
         expect(body.nodeType).to.equal(1);
         expect(body.nodeName).to.equal('BODY');
     });
 
-    it('find should return null if no element is found', () => {
+    it('should return null if no element is found', () => {
         expect(find('#nonexistent')).to.equal(null);
     });
 
-    it('find should return the first element of query', () => {
-        expect(find('body')).to.equal(query('body')[0]);
+    it('should return the first element of query', () => {
+        append(`
+            <div></div>
+            <div></div>
+            <div></div>
+        `);
+
+        expect(find('div')).to.equal(query('div')[0]);
     });
 
     it('should support a contextual element as an optional second argument', () => {
@@ -31,10 +37,7 @@ describe('sonic', () => {
         `);
 
         const root = document.querySelector('#foo');
-
-        const elements = query('span', root);
-
-        testResults(elements, '#foo span');
+        expect(query('span', root)).to.deep.equal(Array.from(document.querySelectorAll('#foo span')));
     });
 
     it('should support a selector string for a contextual element as an optional second argument', () => {
@@ -46,9 +49,7 @@ describe('sonic', () => {
             </div>
         `);
 
-        const elements = query('em', '#foo');
-
-        testResults(elements, '#foo em');
+        expect(query('em', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo em')));
     });
 
     it('should be context-aware', () => {
@@ -61,11 +62,7 @@ describe('sonic', () => {
             </section>
         `);
 
-        const expected = document.querySelector('#foo section h1');
-
-        const element = find('section h1', '#foo');
-
-        expect(element).to.equal(expected);
+        expect(find('section h1', '#foo')).to.equal(document.querySelector('#foo section h1'));
     });
 
     it('should not return duplicate elements', () => {
@@ -96,10 +93,9 @@ describe('sonic', () => {
         `);
 
         const elements = query('div');
-
         const expected = elements.slice().sort((a, b) => 3 - (a.compareDocumentPosition(b) & 6));
 
-        testResults(elements, expected);
+        expect(elements).to.deep.equal(expected);
     });
 
     it('should accept selector strings with leading/trailing spaces', () => {
@@ -107,7 +103,12 @@ describe('sonic', () => {
 
         const expected = document.querySelector('#foo');
 
-        [' #foo', '#foo ', ' #foo ', '  #foo   '].forEach((selector) => {
+        [
+            ' #foo',
+            '#foo ',
+            ' #foo ',
+            '  #foo   '
+        ].forEach((selector) => {
             expect(find(selector)).to.equal(expected);
         });
     });

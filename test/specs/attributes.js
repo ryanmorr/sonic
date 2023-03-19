@@ -1,7 +1,7 @@
-import { append, testResults } from '../setup';
+import { append } from '../setup';
 import { query } from '../../src/sonic';
 
-describe('sonic/attributes', () => {
+describe('attributes', () => {
     it('should support [attr]', () => {
         append(`
             <div id="foo">
@@ -13,9 +13,7 @@ describe('sonic/attributes', () => {
             </div>
         `);
 
-        const elements = query('[foo]', '#foo');
-
-        testResults(elements, '#foo div[foo]');
+        expect(query('[foo]', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo div[foo]')));
     });
 
     it('should support [attr=value]', () => {
@@ -29,10 +27,12 @@ describe('sonic/attributes', () => {
             </div>
         `);
 
-        ['[foo=bar]', '[foo="bar"]'].forEach((selector) => {
-            const elements = query(selector, '#foo');
-
-            testResults(elements, '#foo div[foo=bar]');
+        [
+            '[foo=bar]', 
+            '[foo="bar"]',
+            `[foo='bar']` // eslint-disable-line quotes
+        ].forEach((selector) => {
+            expect(query(selector, '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo div[foo=bar]')));
         });
     });
 
@@ -46,9 +46,7 @@ describe('sonic/attributes', () => {
             </div>
         `);
 
-        const elements = query('[foo~="random"]', '#foo');
-
-        testResults(elements, '#foo [foo~="random"]');
+        expect(query('[foo~="random"]', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo [foo~="random"]')));
     });
 
     it('should support [attr|=value]', () => {
@@ -61,9 +59,7 @@ describe('sonic/attributes', () => {
             </div>
         `);
 
-        const elements = query('[lang|="en"]', '#foo');
-
-        testResults(elements, '#foo [lang|="en"]');
+        expect(query('[lang|="en"]', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo [lang|="en"]')));
     });
 
     it('should support [attr^=value]', () => {
@@ -76,9 +72,7 @@ describe('sonic/attributes', () => {
             </div>
         `);
 
-        const elements = query('[foo^="ba"]', '#foo');
-
-        testResults(elements, '#foo [foo^="ba"]');
+        expect(query('[foo^="ba"]', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo [foo^="ba"]')));
     });
 
     it('should support [attr$=value]', () => {
@@ -90,9 +84,7 @@ describe('sonic/attributes', () => {
             </div>
         `);
 
-        const elements = query('[foo$="bar"]', '#foo');
-
-        testResults(elements, '#foo [foo$="bar"]');
+        expect(query('[foo$="bar"]', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo [foo$="bar"]')));
     });
 
     it('should support [attr*=value]', () => {
@@ -104,9 +96,7 @@ describe('sonic/attributes', () => {
             </div>
         `);
 
-        const elements = query('[foo*="rand"]', '#foo');
-
-        testResults(elements, '#foo [foo*="rand"]');
+        expect(query('[foo*="rand"]', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo [foo*="rand"]')));
     });
 
     it('should support [attr="value" i]', () => {
@@ -118,8 +108,6 @@ describe('sonic/attributes', () => {
             </div>
         `);
 
-        const elements = query('[foo="bar" i]', '#foo');
-
-        testResults(elements, '#foo div');
+        expect(query('[foo="bar" i]', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo div')));
     });
 });

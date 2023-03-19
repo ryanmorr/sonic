@@ -1,7 +1,7 @@
-import { append, testResults } from '../setup';
+import { append } from '../setup';
 import { query, pseudos } from '../../src/sonic';
 
-describe('sonic/pseudos', () => {
+describe('pseudos', () => {
     it('should support :first-child', () => {
         append(`
             <div id="foo">
@@ -13,9 +13,7 @@ describe('sonic/pseudos', () => {
             </div>
         `);
 
-        const elements = query(':first-child', '#foo');
-
-        testResults(elements, '#foo i:first-child');
+        expect(query(':first-child', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo i:first-child')));
     });
 
     it('should support :last-child', () => {
@@ -29,9 +27,7 @@ describe('sonic/pseudos', () => {
             </div>
         `);
 
-        const elements = query(':last-child', '#foo');
-
-        testResults(elements, '#foo i:last-child');
+        expect(query(':last-child', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo i:last-child')));
     });
 
     it('should support :checked', () => {
@@ -43,9 +39,7 @@ describe('sonic/pseudos', () => {
             </form>
         `);
 
-        const elements = query(':checked', '#foo');
-
-        testResults(elements, '#foo input:checked');
+        expect(query(':checked', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo input:checked')));
     });
 
     it('should support :disabled', () => {
@@ -55,9 +49,7 @@ describe('sonic/pseudos', () => {
             </form>
         `);
 
-        const elements = query(':disabled', '#foo');
-
-        testResults(elements, '#foo input');
+        expect(query(':disabled', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo input')));
     });
 
     it('should support :enabled', () => {
@@ -69,9 +61,7 @@ describe('sonic/pseudos', () => {
             </form>
         `);
 
-        const elements = query(':enabled', '#foo');
-
-        testResults(elements, '#foo input:enabled');
+        expect(query(':enabled', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo input:enabled')));
     });
 
     it('should support :not()', () => {
@@ -85,9 +75,7 @@ describe('sonic/pseudos', () => {
             </div>
         `);
 
-        const elements = query(':not(div)', '#foo');
-
-        testResults(elements, '#foo span');
+        expect(query(':not(div)', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo span')));
     });
 
     it('should support custom pseudo-class selectors', () => {
@@ -101,9 +89,7 @@ describe('sonic/pseudos', () => {
 
         pseudos.foo = (el) => el.hasAttribute('foo');
 
-        const elements = query(':foo', '#foo');
-
-        testResults(elements, '#foo [foo]');
+        expect(query(':foo', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo [foo]')));
     });
 
     it('should support custom pseudo-class selectors with values', () => {
@@ -118,8 +104,6 @@ describe('sonic/pseudos', () => {
 
         pseudos.foo = (el, name) => el.hasAttribute(name);
 
-        const elements = query(':foo(bar)', '#foo');
-
-        testResults(elements, '#foo [bar]');
+        expect(query(':foo(bar)', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo [bar]')));
     });
 });

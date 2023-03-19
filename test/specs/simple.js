@@ -1,7 +1,7 @@
-import { append, testResults } from '../setup';
+import { append } from '../setup';
 import { query } from '../../src/sonic';
 
-describe('sonic/simple', () => {
+describe('simple', () => {
     it('should support the universal selector (*)', () => {
         append(`
             <div id="foo">
@@ -13,9 +13,7 @@ describe('sonic/simple', () => {
             </div>
         `);
 
-        const elements = query('*', '#foo');
-
-        testResults(elements, '#foo i');
+        expect(query('*', '#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo i')));
     });
 
     it('should support tag selectors', () => {
@@ -25,17 +23,13 @@ describe('sonic/simple', () => {
             <button></button>
         `);
 
-        const elements = query('button');
-
-        testResults(elements, 'button');
+        expect(query('button')).to.deep.equal(Array.from(document.querySelectorAll('button')));
     });
 
     it('should support id selectors', () => {
         append('<div id="foo"></div>');
 
-        const elements = query('#foo');
-
-        testResults(elements, '#foo');
+        expect(query('#foo')).to.deep.equal(Array.from(document.querySelectorAll('#foo')));
     });
 
     it('should support class selectors', () => {
@@ -46,9 +40,7 @@ describe('sonic/simple', () => {
             <div class="foo"></div>
         `);
 
-        const elements = query('.foo');
-
-        testResults(elements, '.foo');
+        expect(query('.foo')).to.deep.equal(Array.from(document.querySelectorAll('.foo')));
     });
 
     it('should support multiple class selectors', () => {
@@ -60,9 +52,7 @@ describe('sonic/simple', () => {
             <div class="bar foo"></div>
         `);
 
-        const elements = query('.foo.bar');
-
-        testResults(elements, '.foo.bar');
+        expect(query('.foo.bar')).to.deep.equal(Array.from(document.querySelectorAll('.foo.bar')));
     });
 
     it('should support multiple selectors', () => {
@@ -75,8 +65,6 @@ describe('sonic/simple', () => {
             <i></i>
         `);
 
-        const elements = query('div, em, i');
-
-        testResults(elements, 'div, em, i');
+        expect(query('div, em, i')).to.deep.equal(Array.from(document.querySelectorAll('div, em, i')));
     });
 });
